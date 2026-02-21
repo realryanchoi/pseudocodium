@@ -1,8 +1,6 @@
 import { ConfigInterface } from "./interfaces";
 import { homedir as osHomedir } from "os";
 import { join as joinPath } from "path";
-import * as vscode from "vscode";
-
 import { promises as fsp } from "fs";
 
 /**
@@ -18,24 +16,21 @@ export class Config {
 
     /**
      * Constructor for {@link Config}
-     * @param callback - The callback for whatever instantiated {@link Config} to continue in after the config file has been loaded
+     * @param callback - Invoked after config loading completes (whether or not the file exists)
      */
     constructor(callback: () => void) {
         this._config = {};
         this.findConfigFile(callback);
     }
 
-    /** Finds the config file with the highest priority
-     * (currently only supports config file in home directory)
-     * @param callback - The callback for whatever instantiated {@link Config} to continue in after the config file has been loaded
+    /**
+     * Finds and loads the config file from the user's home directory.
+     * Always invokes {@link callback} on completion, even if no config file is found.
+     * @param callback - Invoked after config loading completes
      */
     findConfigFile(callback: () => void): void {
-        var homeDirectory = osHomedir();
-        console.log(homeDirectory);
-
-        var homeDirFile = joinPath(homeDirectory, ".pseudoconfig");
-        console.log("Home Dir File", homeDirFile);
-        console.log(vscode.workspace.workspaceFolders);
+        const homeDirectory = osHomedir();
+        const homeDirFile = joinPath(homeDirectory, ".pseudoconfig");
 
         fsp.readFile(homeDirFile)
             .then(data => {
@@ -43,7 +38,8 @@ export class Config {
                 callback();
             })
             .catch(() => {
-                console.log("Pseudocode: Error loading .pseudoconfig file");
+                console.log("Pseudocode: No .pseudoconfig file found, using defaults");
+                callback();
             });
     }
 }

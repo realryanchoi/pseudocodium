@@ -16,7 +16,7 @@ export interface IndexInterface {
 }
 
 /**
- * Contains the information neccesary to highlight a token in the file
+ * Contains the information necessary to highlight a token in the file
  */
 export interface TokenInterface {
     /** The line number the token is on */

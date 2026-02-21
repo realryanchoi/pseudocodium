@@ -8,8 +8,8 @@ import { tokenTypesLegend, tokenModifiersLegend } from "./tokenTypes";
  */
 export function activate(context: vscode.ExtensionContext) {
     const legend = new vscode.SemanticTokensLegend(tokenTypesLegend, tokenModifiersLegend);
-    var DocSemTokProv = new DocumentSemanticTokensProvider();
-    var conf = new Config(() => {
+    const DocSemTokProv = new DocumentSemanticTokensProvider();
+    const conf = new Config(() => {
         if (conf.config.custom !== undefined) DocSemTokProv.index = conf.config.custom;
         context.subscriptions.push(
             vscode.languages.registerDocumentSemanticTokensProvider(

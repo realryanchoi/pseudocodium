@@ -1,9 +1,10 @@
 # Pseudocode
 
-[![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/willumz.generic-pseudocode)](https://marketplace.visualstudio.com/items?itemName=willumz.generic-pseudocode)
-<!-- [![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/willumz.generic-pseudocode)](https://marketplace.visualstudio.com/items?itemName=willumz.generic-pseudocode) -->
+[![Open VSX Version](https://img.shields.io/open-vsx/v/realryanchoi/pseudocodium)](https://open-vsx.org/extension/realryanchoi/pseudocodium)
 
 A simple extension for syntax highlighting of generic pseudocode. (file extension: `.pseudo`)
+
+Compatible with **VSCodium** and VSCode. Published on the [Open VSX Registry](https://open-vsx.org/extension/realryanchoi/pseudocodium).
 
 Syntax highlighting exists for multiple variants of common pseudocode keywords, allowing you to use your own style and not confining you to a specific format.
 
@@ -129,7 +130,7 @@ You can also define your own custom keywords in a config file.
 
 If you aren't content with the predefined keywords included, you can now add your own to a `.pseudoconfig` file located in your user's home directory (`~/.pseudoconfig` or `C:\Users\{username}\.pseudoconfig`).
 
-**To use this feature you must make sure** `editor.semanticHighlighting.enabled` **is set to** `true` **in VSCode.**
+**To use this feature you must make sure** `editor.semanticHighlighting.enabled` **is set to** `true` **in your editor settings.**
 
 The config file should contain a JSON object, with a single key `"custom"` containing an object with a single key `"keyword"` (the only scope currently supported for custom highlighting) which has a value of an array of strings, which holds your custom keywords.
 
