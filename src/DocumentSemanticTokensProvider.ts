@@ -1,6 +1,11 @@
 import * as vscode from "vscode";
+import * as path from "path";
+import * as os from "os";
 import { TokenInterface, IndexInterface } from "./interfaces";
 import { tokenCodes } from "./tokenTypes";
+import { FileDirectives, parseDirectives } from "./FileDirectiveParser";
+import { resolveStandard } from "./standards";
+import { Config } from "./Config";
 
 /**
  * Per-line comment state, precomputed by {@link DocumentSemanticTokensProvider.buildCommentStates}.
@@ -16,22 +21,37 @@ interface LineCommentState {
     inlineBlockRanges: Array<{ start: number; end: number | null }>;
 }
 
+/** Shape of one per-document cache entry */
+interface CacheEntry {
+    fingerprint: string;
+    index: IndexInterface;
+}
+
 /**
- * Deals with processing the document for the tokens to highlight
+ * Deals with processing the document for the tokens to highlight.
+ * Supports per-file `// @standard:` and `// @extend:` directives that are
+ * merged on top of the global {@link baseIndex}.
  */
 export class DocumentSemanticTokensProvider implements vscode.DocumentSemanticTokensProvider {
     /**
-     * The index required for the class to work.
-     * Maps token type names to arrays of custom keyword strings.
+     * Keywords from global `~/.pseudoconfig` and workspace-root `.pseudoconfig`.
+     * Set by `extension.ts` after global config loads.
      */
-    index: IndexInterface = {};
+    baseIndex: IndexInterface = {};
+
+    /**
+     * Per-document cache of resolved effective indexes.
+     * Key: document URI string. Invalidated when file directives change.
+     */
+    private _cache = new Map<string, CacheEntry>();
 
     async provideDocumentSemanticTokens(
         document: vscode.TextDocument,
         _token: vscode.CancellationToken
     ): Promise<vscode.SemanticTokens> {
         const documentText = document.getText();
-        const tokens = this.extractTokens(this.cleanText(documentText));
+        const effectiveIndex = await this._resolveEffectiveIndex(document, documentText);
+        const tokens = this.extractTokens(this.cleanText(documentText), effectiveIndex);
 
         const builder = new vscode.SemanticTokensBuilder();
         tokens.forEach(val => {
@@ -42,12 +62,89 @@ export class DocumentSemanticTokensProvider implements vscode.DocumentSemanticTo
     }
 
     /**
+     * Returns the effective IndexInterface for a document, using cache where possible.
+     * Cache is invalidated whenever the directive fingerprint changes.
+     */
+    private async _resolveEffectiveIndex(
+        document: vscode.TextDocument,
+        text: string
+    ): Promise<IndexInterface> {
+        const directives = parseDirectives(text);
+        const fingerprint = JSON.stringify(directives);
+        const uriKey = document.uri.toString();
+
+        const cached = this._cache.get(uriKey);
+        if (cached && cached.fingerprint === fingerprint) {
+            return cached.index;
+        }
+
+        const index = await this._buildIndex(document, directives);
+        this._cache.set(uriKey, { fingerprint, index });
+        return index;
+    }
+
+    /**
+     * Builds the merged effective index from all config sources.
+     *
+     * Merge order (lowest → highest priority):
+     * 1. Built-in standard keywords (`@standard:` directive)
+     * 2. `baseIndex` (global `~/.pseudoconfig` + workspace config, set by extension.ts)
+     * 3. Each `@extend:` file's `custom` index, in listed order
+     */
+    private async _buildIndex(
+        document: vscode.TextDocument,
+        directives: FileDirectives
+    ): Promise<IndexInterface> {
+        const layers: IndexInterface[] = [];
+
+        if (directives.standard !== undefined) {
+            const std = resolveStandard(directives.standard);
+            if (std !== undefined) {
+                layers.push(std);
+            }
+            // Unknown standard name: silently skipped
+        }
+
+        if (Object.keys(this.baseIndex).length > 0) {
+            layers.push(this.baseIndex);
+        }
+
+        const docDir = path.dirname(document.uri.fsPath);
+        for (const rawPath of directives.extends) {
+            const resolved = this._resolvePath(rawPath, docDir);
+            const conf = await Config.loadFromPath(resolved);
+            if (conf.custom !== undefined) {
+                layers.push(conf.custom);
+            }
+        }
+
+        return Config.mergeIndexes(...layers);
+    }
+
+    /**
+     * Resolves a path from a directive.
+     * - `~/…` expands to the home directory.
+     * - Absolute paths are used as-is.
+     * - Relative paths resolve against `docDir`.
+     */
+    private _resolvePath(rawPath: string, docDir: string): string {
+        if (rawPath.startsWith("~/") || rawPath === "~") {
+            return path.join(os.homedir(), rawPath.slice(2));
+        }
+        if (path.isAbsolute(rawPath)) {
+            return rawPath;
+        }
+        return path.resolve(docDir, rawPath);
+    }
+
+    /**
      * Extracts tokens from the contents of the file.
      * Precomputes comment positions in O(n) then checks each token in O(1).
-     * @param text - The contents of the open file (should be cleaned first using {@link cleanText})
+     * @param text  - The contents of the open file (should be cleaned first using {@link cleanText})
+     * @param index - The effective keyword index to match against
      * @returns The list of processed tokens
      */
-    extractTokens(text: string): TokenInterface[] {
+    extractTokens(text: string, index: IndexInterface): TokenInterface[] {
         const tokens: TokenInterface[] = [];
         const lines = text.split("\n");
         const commentStates = this.buildCommentStates(lines);
@@ -55,7 +152,7 @@ export class DocumentSemanticTokensProvider implements vscode.DocumentSemanticTo
         for (let i = 0; i < lines.length; i++) {
             const re = /[A-Za-z_][A-Za-z0-9_]*/g;
             for (const match of lines[i].matchAll(re)) {
-                const matchType = this.determineType(match[0]);
+                const matchType = this.determineType(match[0], index);
                 if (matchType !== -1 && match.index !== undefined && !this.isInComment(i, match.index, commentStates)) {
                     tokens.push({
                         line: i,
@@ -107,11 +204,12 @@ export class DocumentSemanticTokensProvider implements vscode.DocumentSemanticTo
      * Determines the type of the token so it can be correctly highlighted.
      * Returns on the first match found.
      * @param tokenText - the value of the token e.g. `myKeyword`
-     * @returns The numerical type of the token, or -1 if not a custom keyword
+     * @param index     - The effective keyword index to match against
+     * @returns The numerical type of the token, or -1 if not a known keyword
      */
-    determineType(tokenText: string): number {
-        for (const typeVal of Object.keys(this.index)) {
-            if (this.index[typeVal].includes(tokenText)) {
+    determineType(tokenText: string, index: IndexInterface): number {
+        for (const typeVal of Object.keys(index)) {
+            if (index[typeVal].includes(tokenText)) {
                 const code = tokenCodes.get(typeVal);
                 if (code !== undefined) return code;
             }
@@ -198,8 +296,8 @@ export class DocumentSemanticTokensProvider implements vscode.DocumentSemanticTo
     /**
      * Returns true if the character at the given position is inside a comment.
      * Requires precomputed states from {@link buildCommentStates}.
-     * @param line - Zero-based line index
-     * @param col - Zero-based column index
+     * @param line   - Zero-based line index
+     * @param col    - Zero-based column index
      * @param states - Precomputed comment states from {@link buildCommentStates}
      */
     isInComment(line: number, col: number, states: LineCommentState[]): boolean {
