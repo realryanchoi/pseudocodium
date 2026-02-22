@@ -1,44 +1,24 @@
-# Pseudocode
+# Pseudocodium
+
+> Forked from [willumz/generic-pseudocode-vscode](https://github.com/willumz/generic-pseudocode-vscode) — adapted for VSCodium and the Open VSX Registry. Extended with support for multiple pseudocode standards, and Mermaid.js flowchart generation.
+
+A syntax highlighting and snippets extension for generic pseudocode. (file extension: `.pseudo`). Syntax highlighting exists for multiple variants of common pseudocode keywords, allowing you to use your own style without being confined to a specific format.
 
 [![Open VSX Version](https://img.shields.io/open-vsx/v/realryanchoi/pseudocodium)](https://open-vsx.org/extension/realryanchoi/pseudocodium)
 
-A syntax highlighting and snippets extension for generic pseudocode. (file extension: `.pseudo`)
-
 Compatible with **VSCodium** and VSCode. Published on the [Open VSX Registry](https://open-vsx.org/extension/realryanchoi/pseudocodium).
 
-Syntax highlighting exists for multiple variants of common pseudocode keywords, allowing you to use your own style without being confined to a specific format.
-
 ---
 
-## Table of Contents
+## What's New in v0.1.0
 
-- [What's New in v1.5.0](#whats-new-in-v150)
-- [Features](#features)
-  - [Syntax Highlighting](#syntax-highlighting)
-  - [Snippets](#snippets)
-  - [Customisable Keywords](#customisable-keywords)
-- [Known Bugs](#known-bugs)
-- [Roadmap](#roadmap)
-- [Release Notes](#release-notes)
+**Pseudocode standards — built-in keyword sets activated per file:**
+- New `// @standard: <name>` file directive (place in the first 10 lines) enables semantic highlighting for a named keyword set without any manual config.
+- Three built-in standards: `aps145` (Seneca Polytechnic APS145 course), `modern` (industry pseudocode conventions), `generic` (minimal common keywords).
+- New `// @extend: <path>` directive layers additional `.pseudoconfig`-format JSON files on top, scoped to individual files. Multiple `@extend:` lines are processed in order.
 
----
-
-## What's New in v1.5.0
-
-This release is a fork of [generic-pseudocode](https://github.com/Willumz/generic-pseudocode-vscode) by Willumz, adapted for VSCodium and the Open VSX Registry.
-
-**Bug fixes:**
-- Fixed a critical bug where the semantic tokens provider was never registered for users without a `~/.pseudoconfig` file — this meant custom keyword highlighting was silently broken for everyone not already using the feature.
-- Fixed the custom keyword regex: identifiers containing underscores or digits (e.g. `my_keyword`, `keyword2`) are now correctly matched and highlighted.
-
-**Performance:**
-- Replaced O(n²) per-token comment scanning with a single O(n) precomputation pass, significantly improving performance on larger files.
-
-**Code quality:**
-- Removed leftover debug `console.log` statements and commented-out code.
-- Modernised TypeScript throughout (`const`/`let`, `for...of`, early returns).
-- Removed the deprecated `vscode` devDependency; updated `@types/vscode`, `@types/node`, and `typescript`.
-- Updated `.vscodeignore` to exclude source files and dev artifacts from the packaged extension.
+**Workspace config support:**
+- A `.pseudoconfig` at the workspace root is now auto-discovered and merged automatically — no setup required. Keyword priority order: built-in standard → global `~/.pseudoconfig` → workspace `.pseudoconfig` → per-file `@extend:` files.
 
 ---
 
@@ -192,13 +172,61 @@ All snippets have uppercase variants prefixed with `u` (e.g. `uif`, `ufor`, `ufu
 
 ---
 
+### Pseudocode Standards
+
+Pseudocodium includes built-in keyword sets for common pseudocode conventions. You activate one per file using a **file-level directive** comment at the top of your `.pseudo` file. This enables semantic highlighting for that standard's keywords without needing to list them all manually in a config file.
+
+**Prerequisite:** `editor.semanticHighlighting.enabled` must be `true` in your editor settings.
+
+#### Activating a Standard
+
+Place `// @standard: <name>` within the **first 10 lines** of your file:
+
+```pseudo
+// @standard: aps145
+
+----------------------------------------------------------------
+Description/Purpose:
+ Example using APS145 syntax
+...
+```
+
+If the directive appears more than once, the last occurrence wins.
+
+#### Available Standards
+
+| Name | Description | Keywords include |
+|---|---|---|
+| `aps145` | Seneca Polytechnic APS145 course standard | `DECLARE`, `ASSIGN`, `DISPLAY`, `CALL`, `RETURN`, `REPEAT`, `END`, `Is`, `What`, `Which`, `Keep`, `Continue` |
+| `modern` | Industry-standard pseudocode conventions | `IF`, `THEN`, `ELSE`, `WHILE`, `FOR`, `FOREACH`, `FUNCTION`, `PROCEDURE`, `RETURN`, `CLASS`, `TRUE`, `FALSE`, `NULL`, `AND`, `OR`, `NOT`, `INPUT`, `OUTPUT`, and more |
+| `generic` | Minimal keyword set — a common intersection suitable for language-agnostic algorithm descriptions | `IF`, `ELSE`, `WHILE`, `FOR`, `FOREACH`, `FUNCTION`, `RETURN`, `INPUT`, `OUTPUT`, `AND`, `OR`, `NOT`, `TRUE`, `FALSE`, `NULL`, `END` |
+
+#### Extending a Standard
+
+You can layer additional config files on top of a standard using `// @extend:` directives. Each line appends one path; multiple `@extend:` lines are processed in order, each one taking priority over the previous.
+
+```pseudo
+// @standard: aps145
+// @extend: /home/user/my-extra-keywords.json
+// @extend: ./project-keywords.json
+```
+
+The path can be absolute or relative to the workspace root. The referenced file must be a valid `.pseudoconfig`-format JSON file (a `"custom"` key with token type arrays).
+
+#### Priority and Merge Order
+
+When multiple keyword sources are active, they are merged in the following order — later sources override earlier ones on conflict, and all unique keywords are unioned together:
+
+1. Built-in standard (`// @standard:`)
+2. Global config (`~/.pseudoconfig`)
+3. Workspace config (`.pseudoconfig` in workspace root, auto-discovered)
+4. `// @extend:` files (in directive order, lowest to highest priority)
+
+---
+
 ### Customisable Keywords
 
-You can define your own custom keywords in a config file for semantic highlighting.
-
-Place a `.pseudoconfig` file in your home directory:
-- **Unix/macOS:** `~/.pseudoconfig`
-- **Windows:** `C:\Users\{username}\.pseudoconfig`
+You can define your own custom keywords in a config file for semantic highlighting. Config files use the same JSON format regardless of where they are placed.
 
 **Prerequisite:** `editor.semanticHighlighting.enabled` must be set to `true` in your editor settings.
 
@@ -218,9 +246,15 @@ The file must be a JSON object with a `"custom"` key containing a `"keyword"` ar
 
 Custom keyword names may contain letters, underscores, and digits (e.g. `my_func`, `type2`).
 
-> **Note:** You must reload the extension after editing the config file.
->
-> **Note:** Workspace-level config files are not yet supported — only the global home directory config is read.
+**Config file locations** (all are optional; all active sources are merged together):
+
+| Location | Path | Purpose |
+|---|---|---|
+| Global | `~/.pseudoconfig` (Unix/macOS) or `C:\Users\{username}\.pseudoconfig` (Windows) | Applies to every `.pseudo` file you open |
+| Workspace | `.pseudoconfig` in the workspace root folder | Shared project-specific keywords; auto-discovered |
+| Per-file | Any `.json` path via `// @extend:` directive | Scoped to individual files; see [Extending a Standard](#extending-a-standard) |
+
+> **Note:** You must reload the extension after editing a config file for changes to take effect.
 
 ---
 
@@ -237,7 +271,6 @@ The following improvements are planned or desirable for future releases.
 
 ### High priority
 
-- **Workspace-level config** — support a `.pseudoconfig` in the workspace root directory so teams can share project-specific keyword sets, with precedence over the global config.
 - **Config hot-reload** — watch the config file for changes with `fs.watch` and re-register the provider automatically, rather than requiring a manual extension reload.
 - **Config validation** — validate `.pseudoconfig` against a schema and surface actionable error messages in VSCode's output panel when the file is malformed.
 - **Fix `do`/`end` autoclosing in identifiers** — improve the `wordPattern` or autoclosing conditions in `language-configuration.json` so that `do` is not autoclosed when it appears mid-word.
@@ -262,31 +295,13 @@ The following improvements are planned or desirable for future releases.
 
 See [CHANGELOG.md](CHANGELOG.md) for the full history.
 
-### 1.5.0
+### 0.1.0
 
-- Forked as **pseudocodium** for VSCodium / Open VSX
+- Forked as **Pseudocodium** from [willumz/generic-pseudocode-vscode](https://github.com/willumz/generic-pseudocode-vscode) for VSCodium / Open VSX
 - Fixed critical bug: semantic tokens provider not registered without `.pseudoconfig`
 - Fixed custom keyword regex to match identifiers with underscores and digits
 - O(n) comment detection replacing O(n²) implementation
+- Added file-level `// @standard:` directive with built-in `aps145`, `modern`, and `generic` keyword sets
+- Added file-level `// @extend:` directive to layer additional config files per file
+- Added workspace-level `.pseudoconfig` auto-discovery and merging
 - Dependency and code quality updates
-
-### 1.4.0
-
-- Added customisable keywords via `.pseudoconfig`
-
-### 1.3.0
-
-- Added `static`, `public`, and `private` access modifiers
-- Added `continue` keyword
-
-### 1.2.0
-
-- Added template string support (`${}`)
-
-### 1.1.0
-
-- Added structs and `struct`/`structdo` snippets
-
-### 1.0.0
-
-- Initial release with syntax highlighting and snippets
