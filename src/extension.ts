@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import * as path from "path";
 import { Config } from "./Config";
 import { DocumentSemanticTokensProvider } from "./DocumentSemanticTokensProvider";
 import { tokenTypesLegend, tokenModifiersLegend } from "./tokenTypes";
@@ -9,8 +10,23 @@ import { tokenTypesLegend, tokenModifiersLegend } from "./tokenTypes";
 export function activate(context: vscode.ExtensionContext) {
     const legend = new vscode.SemanticTokensLegend(tokenTypesLegend, tokenModifiersLegend);
     const DocSemTokProv = new DocumentSemanticTokensProvider();
-    const conf = new Config(() => {
-        if (conf.config.custom !== undefined) DocSemTokProv.index = conf.config.custom;
+
+    const conf = new Config(async () => {
+        // Start with global ~/.pseudoconfig keywords
+        let baseIndex = conf.config.custom ?? {};
+
+        // Auto-discover workspace-root .pseudoconfig and layer it on top
+        const workspaceFolders = vscode.workspace.workspaceFolders;
+        if (workspaceFolders && workspaceFolders.length > 0) {
+            const wsConfigPath = path.join(workspaceFolders[0].uri.fsPath, ".pseudoconfig");
+            const wsConf = await Config.loadFromPath(wsConfigPath);
+            if (wsConf.custom !== undefined) {
+                baseIndex = Config.mergeIndexes(baseIndex, wsConf.custom);
+            }
+        }
+
+        DocSemTokProv.baseIndex = baseIndex;
+
         context.subscriptions.push(
             vscode.languages.registerDocumentSemanticTokensProvider(
                 { language: "pseudocode" },

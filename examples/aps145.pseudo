@@ -1,0 +1,77 @@
+// @standard: aps145
+
+----------------------------------------------------------------
+Description/Purpose:
+ Manages a collection of student records, demonstrating APS145
+ pseudocode syntax including functions, collections, and iteration.
+Argument(s) : NONE
+Return Value: NONE
+----------------------------------------------------------------
+main()
+1. DECLARE:
+  students = EMPTY (Collection of type: SenecaStudent)
+  continueAdding = TRUE
+2. Is continueAdding = TRUE?
+  A. YES:
+    1. CALL: AddStudent(students)
+    2. DISPLAY:
+      "Add another student?"
+      [BUTTON: YES] [BUTTON: NO]
+    3. ASSIGN: continueAdding = [User entered value]
+    4. REPEAT: from Step #2
+3. CALL: DisplayAllStudents(students)
+4. End
+
+----------------------------------------------------------------
+Description/Purpose:
+ Prompts user to enter student data and adds to collection
+Argument(s) : students (Collection of type: SenecaStudent)
+Return Value: Nothing
+----------------------------------------------------------------
+AddStudent (students)
+1. DECLARE:
+  newStudent (Type: SenecaStudent)
+  studentID
+  firstName
+  lastName
+2. DISPLAY:
+  "Enter student ID:"
+3. ASSIGN: studentID = [User entered value]
+4. DISPLAY:
+  "Enter first name:"
+5. ASSIGN: firstName = [User entered value]
+6. DISPLAY:
+  "Enter last name:"
+7. ASSIGN: lastName = [User entered value]
+8. ASSIGN: newStudent.id = studentID
+9. ASSIGN: newStudent.firstName = firstName
+10. ASSIGN: newStudent.lastName = lastName
+11. students.ADD(newStudent)
+12. DISPLAY:
+  "Student <firstName> <lastName> added successfully!"
+13. End
+
+----------------------------------------------------------------
+Description/Purpose:
+ Displays all students in the collection
+Argument(s) : students (Collection of type: SenecaStudent)
+Return Value: Nothing
+----------------------------------------------------------------
+DisplayAllStudents (students)
+1. DECLARE:
+  tmpStudent
+  count = 0
+2. DISPLAY:
+  "=== Student Roster ==="
+3. ASSIGN: tmpStudent = students.NEXT
+4. Is tmpStudent empty?
+  A. NO:
+    1. ASSIGN: count = count + 1
+    2. DISPLAY:
+      "Student #<count>:"
+      "  ID: <tmpStudent.id>"
+      "  Name: <tmpStudent.firstName> <tmpStudent.lastName>"
+    3. REPEAT: from Step #3
+5. DISPLAY:
+  "Total students: <students.COUNT>"
+6. End
