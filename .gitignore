@@ -1,3 +1,6 @@
-*.vsix
-
+# npm
 node_modules
+# typescript build files
+out
+# ignore .vsix files until ready
+*.vsix

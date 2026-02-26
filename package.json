@@ -1,10 +1,10 @@
 {
     "name": "pseudocodium",
-    "displayName": "Pseudocode",
+    "displayName": "Pseudocodium",
     "description": "Syntax highlighting and snippets for generic pseudocode. VSCodium-compatible, published on Open VSX.",
     "publisher": "realryanchoi",
-    "icon": "images/icon.png",
-    "version": "1.5.0",
+    "icon": "logo.png",
+    "version": "0.2.0",
     "engines": {
         "vscode": "^1.74.0"
     },

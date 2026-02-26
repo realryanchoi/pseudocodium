@@ -1,4 +1,4 @@
-import { ConfigInterface } from "./interfaces";
+import { ConfigInterface, IndexInterface } from "./interfaces";
 import { homedir as osHomedir } from "os";
 import { join as joinPath } from "path";
 import { promises as fsp } from "fs";
@@ -21,6 +21,44 @@ export class Config {
     constructor(callback: () => void) {
         this._config = {};
         this.findConfigFile(callback);
+    }
+
+    /**
+     * Loads a config file from an arbitrary absolute path.
+     * Returns an empty {@link ConfigInterface} on any error (file missing, malformed JSON, etc.).
+     * Never rejects.
+     * @param filePath - Absolute path to the config file
+     */
+    static async loadFromPath(filePath: string): Promise<ConfigInterface> {
+        try {
+            const data = await fsp.readFile(filePath);
+            return JSON.parse(data.toString()) as ConfigInterface;
+        } catch {
+            return {};
+        }
+    }
+
+    /**
+     * Merges multiple {@link IndexInterface} objects into one.
+     * Arrays are unioned: all unique keywords from all sources are included.
+     * Duplicates are removed; first-occurrence order is preserved.
+     * @param indexes - Ordered from lowest to highest priority
+     */
+    static mergeIndexes(...indexes: IndexInterface[]): IndexInterface {
+        const merged: IndexInterface = {};
+        for (const idx of indexes) {
+            for (const key of Object.keys(idx)) {
+                if (!merged[key]) {
+                    merged[key] = [];
+                }
+                for (const word of idx[key]) {
+                    if (!merged[key].includes(word)) {
+                        merged[key].push(word);
+                    }
+                }
+            }
+        }
+        return merged;
     }
 
     /**
