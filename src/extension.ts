@@ -3,6 +3,7 @@ import * as path from "path";
 import { Config } from "./Config";
 import { DocumentSemanticTokensProvider } from "./DocumentSemanticTokensProvider";
 import { tokenTypesLegend, tokenModifiersLegend } from "./tokenTypes";
+import { FlowchartPanel } from "./mermaid/FlowchartPanel";
 
 /** Entry point for the extension which runs when a file with the language
  * type "pseudocode" is opened
@@ -35,4 +36,16 @@ export function activate(context: vscode.ExtensionContext) {
             )
         );
     });
+
+    // Command: generate and preview a Mermaid flowchart for the active pseudocode file
+    context.subscriptions.push(
+        vscode.commands.registerCommand("pseudocodium.previewFlowchart", () => {
+            const editor = vscode.window.activeTextEditor;
+            if (!editor) {
+                vscode.window.showWarningMessage("Open a .pseudo file first.");
+                return;
+            }
+            FlowchartPanel.createOrShow(editor.document.getText());
+        })
+    );
 }

@@ -1,5 +1,17 @@
 # Change Log
 
+## 0.3.0
+
+**Flowchart preview (Mermaid.js):**
+- New command **Pseudocodium: Preview Flowchart** (`pseudocodium.previewFlowchart`) generates a live Mermaid flowchart from the active `.pseudo` file
+- Accessible via the Command Palette or the editor title bar icon (when a `.pseudo` file is open)
+- One flowchart per APS145 function; three new source modules isolated under `src/mermaid/`: `Aps145Parser`, `MermaidGenerator`, `FlowchartPanel`
+- APS145 constructs map to correct Mermaid shapes: process box, decision diamond, subroutine box (`CALL:`), stadium for Start/End
+- `REPEAT: from Step #N` renders as a dashed back-edge to the target step
+- Decision steps with one explicit branch auto-add an inferred opposing edge (YES→NO, etc.)
+- Multi-line `DISPLAY:` and `DECLARE:` labels include their first content line
+- Webview respects VS Code dark/light theme; Mermaid rendered via CDN (requires network)
+
 ## 0.2.0
 
 **APS145 TextMate grammar patterns:**

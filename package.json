@@ -4,7 +4,7 @@
     "description": "Syntax highlighting and snippets for generic pseudocode. VSCodium-compatible, published on Open VSX.",
     "publisher": "realryanchoi",
     "icon": "logo.png",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "engines": {
         "vscode": "^1.74.0"
     },
@@ -38,7 +38,30 @@
                 "language": "pseudocode",
                 "path": "./snippets.json"
             }
-        ]
+        ],
+        "commands": [
+            {
+                "command": "pseudocodium.previewFlowchart",
+                "title": "Preview Flowchart",
+                "category": "Pseudocodium",
+                "icon": "$(type-hierarchy)"
+            }
+        ],
+        "menus": {
+            "editor/title": [
+                {
+                    "command": "pseudocodium.previewFlowchart",
+                    "when": "resourceLangId == pseudocode",
+                    "group": "navigation"
+                }
+            ],
+            "commandPalette": [
+                {
+                    "command": "pseudocodium.previewFlowchart",
+                    "when": "resourceLangId == pseudocode"
+                }
+            ]
+        }
     },
     "activationEvents": [
         "onLanguage:pseudocode"
