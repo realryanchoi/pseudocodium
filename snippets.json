@@ -512,5 +512,73 @@
             "END"
 		],
 		"description": "Define a struct with do"
+	},
+
+	"APS145 Function Template": {
+		"prefix": "apsfunc",
+		"body": [
+			"----------------------------------------------------------------",
+			"Description/Purpose:",
+			" ${1:Brief description of what this function does}",
+			"Argument(s) : ${2:parameter descriptions}",
+			"Return Value: ${3:return value or Nothing}",
+			"----------------------------------------------------------------",
+			"${4:FunctionName} (${5:parameters})",
+			"1. DECLARE:",
+			"  ${6:variables}",
+			"2. ${7:first step}",
+			"3. ${0}",
+			"4. End"
+		],
+		"description": "APS145 function documentation template"
+	},
+	"APS145 DECLARE Block": {
+		"prefix": "apsdeclare",
+		"body": [
+			"DECLARE:",
+			"  ${1:variableName}",
+			"  ${0}"
+		],
+		"description": "APS145 variable declaration block"
+	},
+	"APS145 Decision Pattern": {
+		"prefix": "apsdecision",
+		"body": [
+			"${1|Is,What,Which|} ${2:condition}?",
+			"  A. ${3:YES}:",
+			"    1. ${4:statement}",
+			"  B. ${5:NO}:",
+			"    1. ${0:statement}"
+		],
+		"description": "APS145 Is/What/Which decision structure"
+	},
+	"APS145 REPEAT Statement": {
+		"prefix": "apsrepeat",
+		"body": "REPEAT: from Step #${1:number}",
+		"description": "APS145 loop back to previous step"
+	},
+	"APS145 ASSIGN Statement": {
+		"prefix": "apsassign",
+		"body": "ASSIGN: ${1:variable} = ${0:value}",
+		"description": "APS145 variable assignment"
+	},
+	"APS145 DISPLAY Block": {
+		"prefix": "apsdisplay",
+		"body": [
+			"DISPLAY:",
+			"  \"${1:message}\"",
+			"  ${0}"
+		],
+		"description": "APS145 display output block"
+	},
+	"APS145 CALL Statement": {
+		"prefix": "apscall",
+		"body": "CALL: ${1:FunctionName}(${2:arguments})",
+		"description": "APS145 function call"
+	},
+	"APS145 Collection Declaration": {
+		"prefix": "apscollection",
+		"body": "${1:collectionName} = EMPTY (Collection of type: ${2:TypeName})",
+		"description": "APS145 empty collection declaration"
 	}
 }

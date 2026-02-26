@@ -4,7 +4,7 @@
     "description": "Syntax highlighting and snippets for generic pseudocode. VSCodium-compatible, published on Open VSX.",
     "publisher": "realryanchoi",
     "icon": "logo.png",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "engines": {
         "vscode": "^1.74.0"
     },

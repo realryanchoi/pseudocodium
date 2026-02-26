@@ -10,7 +10,7 @@ Compatible with **VSCodium** and VSCode. Published on the [Open VSX Registry](ht
 
 ---
 
-## What's New in v0.1.0
+## What's New in v0.2.0
 
 **Pseudocode standards — built-in keyword sets activated per file:**
 - New `// @standard: <name>` file directive (place in the first 10 lines) enables semantic highlighting for a named keyword set without any manual config.
@@ -19,6 +19,18 @@ Compatible with **VSCodium** and VSCode. Published on the [Open VSX Registry](ht
 
 **Workspace config support:**
 - A `.pseudoconfig` at the workspace root is now auto-discovered and merged automatically — no setup required. Keyword priority order: built-in standard → global `~/.pseudoconfig` → workspace `.pseudoconfig` → per-file `@extend:` files.
+
+**APS145 structural syntax highlighting (TextMate grammar):**
+- Function documentation block separators (`----------------------------------------------------------------`) are coloured as documentation comments.
+- `Description/Purpose:`, `Argument(s):`, `Return Value:` header fields are highlighted.
+- Step numbers (`1.`, `2.`, `10.`) and sub-step letters (`A.`, `B.`) are highlighted as constants.
+- APS145 core keywords (`DECLARE`, `ASSIGN`, `DISPLAY`, `CALL`, `RETURN`, `REPEAT`, `END`) are highlighted without requiring semantic highlighting to be enabled.
+- `REPEAT: from Step #N` is parsed as a compound pattern.
+- Collection methods (`.ADD`, `.NEXT`, `.DELETE`, `.COUNT`) are highlighted as built-in functions.
+- String interpolation variables (`<varName>`) are highlighted.
+- Type annotations (`(Type: TypeName)`, `(Collection of type: TypeName)`) are highlighted.
+- UI interaction markers (`[BUTTON: ...]`, `[User entered value]`) are highlighted as string literals.
+- Eight new APS145 snippets: `apsfunc`, `apsdeclare`, `apsdecision`, `apsrepeat`, `apsassign`, `apsdisplay`, `apscall`, `apscollection`.
 
 ---
 
@@ -170,6 +182,19 @@ All snippets have uppercase variants prefixed with `u` (e.g. `uif`, `ufor`, `ufu
 | `classextends` / `classextendsdo` | Class with inheritance |
 | `struct` / `structdo` | Struct definition |
 
+#### APS145 Snippets
+
+| Snippet | Description |
+|---|---|
+| `apsfunc` | Full APS145 function documentation block template |
+| `apsdeclare` | `DECLARE:` variable block |
+| `apsdecision` | `Is`/`What`/`Which` decision structure (A/B branches) |
+| `apsrepeat` | `REPEAT: from Step #N` loop-back statement |
+| `apsassign` | `ASSIGN: var = value` statement |
+| `apsdisplay` | `DISPLAY:` output block |
+| `apscall` | `CALL: FunctionName(args)` statement |
+| `apscollection` | Empty collection declaration |
+
 ---
 
 ### Pseudocode Standards
@@ -294,6 +319,12 @@ The following improvements are planned or desirable for future releases.
 ## Release Notes
 
 See [CHANGELOG.md](CHANGELOG.md) for the full history.
+
+### 0.2.0
+
+- APS145 TextMate grammar patterns: doc blocks, step/sub-step numbering, keywords, collection methods, string interpolation, type annotations, UI markers
+- Eight new APS145 snippets (`apsfunc`, `apsdeclare`, `apsdecision`, `apsrepeat`, `apsassign`, `apsdisplay`, `apscall`, `apscollection`)
+- Comprehensive APS145 example file
 
 ### 0.1.0
 

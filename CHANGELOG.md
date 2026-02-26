@@ -1,5 +1,32 @@
 # Change Log
 
+## 0.2.0
+
+**APS145 TextMate grammar patterns:**
+- Function documentation block separators (`-{10,}`) highlighted as `comment.block.documentation`
+- `Description/Purpose:`, `Argument(s):`, `Return Value:` fields highlighted as documentation keywords
+- Step numbers (`1.`, `2.`) at line start highlighted as `constant.numeric.step`
+- Sub-step letters (`A.`, `B.`) at indented line start highlighted as `constant.character.substep`
+- APS145 core keywords (`DECLARE`, `ASSIGN`, `DISPLAY`, `CALL`, `RETURN`, `REPEAT`, `END`) highlighted via TextMate grammar (no semantic highlighting required)
+- `REPEAT: from Step #N` pattern parsed as compound keyword + step reference
+- Collection methods (`.ADD`, `.NEXT`, `.DELETE`, `.COUNT`) highlighted as `support.function.builtin`
+- String interpolation (`<varName>`) highlighted as `variable.other.interpolated`
+- Type annotations (`(Type: TypeName)`, `(Collection of type: TypeName)`) highlighted
+- UI interaction markers (`[BUTTON: ...]`, `[User entered value]`) highlighted as `string.other.ui-element`
+
+**APS145 snippets:**
+- `apsfunc` — Full APS145 function documentation block template
+- `apsdeclare` — `DECLARE:` variable block
+- `apsdecision` — `Is`/`What`/`Which` decision structure with A/B branches
+- `apsrepeat` — `REPEAT: from Step #N` loop-back
+- `apsassign` — `ASSIGN: var = value`
+- `apsdisplay` — `DISPLAY:` output block
+- `apscall` — `CALL: FunctionName(args)`
+- `apscollection` — Empty collection declaration
+
+**Examples:**
+- Replaced minimal `examples/aps145.pseudo` with a comprehensive multi-function example demonstrating all APS145 syntax features
+
 ## 0.1.0
 
 Forked from [willumz/generic-pseudocode-vscode](https://github.com/willumz/generic-pseudocode-vscode).

@@ -6,6 +6,9 @@
 			"include": "#comments"
 		},
 		{
+			"include": "#aps145"
+		},
+		{
 			"include": "#meta"
 		},
 		{
@@ -419,6 +422,65 @@
 				{
 					"name": "punctuation.accessor.pseudocode",
 					"match": "\\."
+				}
+			]
+		},
+		"aps145": {
+			"patterns": [
+				{
+					"name": "comment.block.documentation.pseudocode",
+					"match": "^-{10,}\\s*$"
+				},
+				{
+					"match": "^(Description\\/Purpose|Argument\\(s\\)|Return Value)\\s*:",
+					"captures": {
+						"1": { "name": "keyword.other.documentation.pseudocode" }
+					}
+				},
+				{
+					"match": "\\b(REPEAT):\\s+(from Step)\\s+(#\\d+)",
+					"captures": {
+						"1": { "name": "keyword.control.aps145.pseudocode" },
+						"2": { "name": "keyword.other.aps145.pseudocode" },
+						"3": { "name": "constant.numeric.step-reference.pseudocode" }
+					}
+				},
+				{
+					"name": "keyword.control.aps145.pseudocode",
+					"match": "\\b(DECLARE|ASSIGN|DISPLAY|CALL|RETURN|REPEAT|END)\\b"
+				},
+				{
+					"match": "^(\\s*)(\\d+)\\.",
+					"captures": {
+						"2": { "name": "constant.numeric.step.pseudocode" }
+					}
+				},
+				{
+					"match": "^(\\s+)([A-Z])\\.",
+					"captures": {
+						"2": { "name": "constant.character.substep.pseudocode" }
+					}
+				},
+				{
+					"match": "\\.(ADD|NEXT|DELETE|COUNT)\\b",
+					"captures": {
+						"1": { "name": "support.function.builtin.pseudocode" }
+					}
+				},
+				{
+					"name": "variable.other.interpolated.pseudocode",
+					"match": "<[a-zA-Z_][a-zA-Z0-9_.]*>"
+				},
+				{
+					"match": "\\((Type|Collection of type):\\s*([a-zA-Z_][a-zA-Z0-9_]*)\\)",
+					"captures": {
+						"1": { "name": "storage.type.annotation.pseudocode" },
+						"2": { "name": "entity.name.type.pseudocode" }
+					}
+				},
+				{
+					"name": "string.other.ui-element.pseudocode",
+					"match": "\\[(BUTTON:[^\\]]*|User entered value)\\]"
 				}
 			]
 		}

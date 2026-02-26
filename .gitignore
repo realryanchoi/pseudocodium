@@ -2,7 +2,5 @@
 node_modules
 # typescript build files
 out
-# ignore example files until ready
-examples
 # ignore .vsix files until ready
 *.vsix
