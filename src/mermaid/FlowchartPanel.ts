@@ -5,8 +5,11 @@
 
 import * as vscode from 'vscode';
 import * as crypto  from 'crypto';
-import { parseDocument }            from './Aps145Parser';
+import { parseDocument }              from './Aps145Parser';
+import { parseDefaultDocument }       from './DefaultParser';
 import { generateMermaid, FunctionChart } from './MermaidGenerator';
+import { ParsedDocument }             from './ParsedTypes';
+import { parseDirectives }            from '../FileDirectiveParser';
 
 export class FlowchartPanel {
     private static _instance: FlowchartPanel | undefined;
@@ -18,14 +21,14 @@ export class FlowchartPanel {
     // Public static entry point
     // ---------------------------------------------------------------------------
 
-    static createOrShow(text: string): void {
+    static createOrShow(text: string, languageId: string): void {
         const column = vscode.window.activeTextEditor
             ? vscode.ViewColumn.Beside
             : vscode.ViewColumn.One;
 
         if (FlowchartPanel._instance) {
             FlowchartPanel._instance._panel.reveal(column, true /* preserve focus */);
-            FlowchartPanel._instance._update(text);
+            FlowchartPanel._instance._update(text, languageId);
             return;
         }
 
@@ -40,16 +43,16 @@ export class FlowchartPanel {
             },
         );
 
-        FlowchartPanel._instance = new FlowchartPanel(panel, text);
+        FlowchartPanel._instance = new FlowchartPanel(panel, text, languageId);
     }
 
     // ---------------------------------------------------------------------------
     // Constructor / disposal
     // ---------------------------------------------------------------------------
 
-    private constructor(panel: vscode.WebviewPanel, text: string) {
+    private constructor(panel: vscode.WebviewPanel, text: string, languageId: string) {
         this._panel = panel;
-        this._update(text);
+        this._update(text, languageId);
         this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
     }
 
@@ -64,10 +67,17 @@ export class FlowchartPanel {
     // Internal rendering
     // ---------------------------------------------------------------------------
 
-    private _update(text: string): void {
-        const doc    = parseDocument(text);
+    private _update(text: string, languageId: string): void {
+        let doc: ParsedDocument;
+        const directive = parseDirectives(text);
+        const isAps145  = languageId === 'aps145-pseudocode' || directive.standard === 'aps145';
+        if (isAps145) {
+            doc = parseDocument(text);
+        } else {
+            doc = parseDefaultDocument(text);
+        }
         const charts = generateMermaid(doc);
-        this._panel.webview.html = buildHtml(charts);
+        this._panel.webview.html = buildHtml(charts, isAps145);
     }
 }
 
@@ -83,7 +93,7 @@ function escapeHtml(s: string): string {
         .replace(/"/g, '&quot;');
 }
 
-function buildHtml(charts: FunctionChart[]): string {
+function buildHtml(charts: FunctionChart[], isAps145: boolean): string {
     const nonce = crypto.randomBytes(16).toString('hex');
 
     // Content Security Policy:
@@ -96,8 +106,11 @@ function buildHtml(charts: FunctionChart[]): string {
         `img-src data: blob:`,          // Mermaid SVG diagrams
     ].join('; ');
 
+    const emptyMsg = isAps145
+        ? 'No APS145 functions found in this file.'
+        : 'No functions found in this file.';
     const bodyContent = charts.length === 0
-        ? `<p class="empty">No APS145 functions found in this file.</p>`
+        ? `<p class="empty">${emptyMsg}</p>`
         : charts.map(c => chartBlock(c)).join('\n');
 
     return `<!DOCTYPE html>

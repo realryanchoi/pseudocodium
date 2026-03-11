@@ -1,10 +1,11 @@
 {
     "name": "pseudocodium",
     "displayName": "Pseudocodium",
-    "description": "Syntax highlighting and snippets for generic pseudocode. VSCodium-compatible, published on Open VSX.",
+    "description": "Syntax highlighting, snippets, and Mermaid flowchart preview for pseudocode. Supports APS145 academic standard (.aps) and generic C-style pseudocode (.pseudo).",
     "publisher": "realryanchoi",
+    "license": "MIT",
     "icon": "logo.png",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "engines": {
         "vscode": "^1.74.0"
     },
@@ -24,18 +25,39 @@
                     ".pseudo"
                 ],
                 "configuration": "./language-configuration.json"
+            },
+            {
+                "id": "aps145-pseudocode",
+                "aliases": [
+                    "APS145 Pseudocode",
+                    "aps145"
+                ],
+                "extensions": [
+                    ".aps",
+                    ".aps145"
+                ],
+                "configuration": "./language-configuration.json"
             }
         ],
         "grammars": [
             {
                 "language": "pseudocode",
-                "scopeName": "source.pseudo",
-                "path": "./syntaxes/pseudocode.tmLanguage.json"
+                "scopeName": "source.pseudocode.default",
+                "path": "./syntaxes/default.tmLanguage.json"
+            },
+            {
+                "language": "aps145-pseudocode",
+                "scopeName": "source.pseudocode.aps145",
+                "path": "./syntaxes/aps145.tmLanguage.json"
             }
         ],
         "snippets": [
             {
                 "language": "pseudocode",
+                "path": "./snippets.json"
+            },
+            {
+                "language": "aps145-pseudocode",
                 "path": "./snippets.json"
             }
         ],
@@ -51,23 +73,21 @@
             "editor/title": [
                 {
                     "command": "pseudocodium.previewFlowchart",
-                    "when": "resourceLangId == pseudocode",
+                    "when": "resourceLangId == pseudocode || resourceLangId == aps145-pseudocode",
                     "group": "navigation"
                 }
             ],
             "commandPalette": [
                 {
                     "command": "pseudocodium.previewFlowchart",
-                    "when": "resourceLangId == pseudocode"
+                    "when": "resourceLangId == pseudocode || resourceLangId == aps145-pseudocode"
                 }
             ]
         }
     },
-    "activationEvents": [
-        "onLanguage:pseudocode"
-    ],
     "main": "./out/extension.js",
     "scripts": {
+        "vscode:prepublish": "npm run compile",
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./"
     },
@@ -82,6 +102,5 @@
         "@types/node": "^20.0.0",
         "@types/vscode": "^1.74.0",
         "typescript": "^5.7.0"
-    },
-    "dependencies": {}
+    }
 }

@@ -1,5 +1,28 @@
 # Change Log
 
+## 0.4.0
+
+**Dual grammar architecture:**
+- Split single grammar into `syntaxes/aps145.tmLanguage.json` (scope `source.pseudocode.aps145`) and `syntaxes/default.tmLanguage.json` (scope `source.pseudocode.default`)
+- APS145 pseudocode now uses dedicated `.aps` / `.aps145` file extensions with its own language ID (`aps145-pseudocode`)
+- Generic C-style pseudocode keeps `.pseudo` with the `pseudocode` language ID
+
+**Simplified file directive:**
+- Replaced `// @standard: <name>` comment directive with clean `@aps145` or `@default` at the top of the file
+- Removed `// @extend:` directive — workspace-level `.pseudoconfig` covers per-project customisation
+- Directive is now highlighted by both grammars as a distinct token
+
+**Flowchart preview for default pseudocode:**
+- Preview Flowchart command now works for `.pseudo` files (C-style) in addition to APS145
+- New `DefaultParser` handles `function/if/else if/else/while/for/foreach` with both `do...end` and `{}` block styles
+- Shared `ParsedTypes` module decouples parser interfaces from APS145-specific code
+- Flowchart panel dispatches to the correct parser based on file language ID
+
+**Other:**
+- Doc block separator reduced from 10+ dashes to 3+ (`---` is now valid)
+- Snippets now registered for both `pseudocode` and `aps145-pseudocode` language IDs
+- Built-in standard renamed from `modern` to `default` in `standards.ts`
+
 ## 0.3.0
 
 **Flowchart preview (Mermaid.js):**

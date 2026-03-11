@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Game Config Flowchart v2</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #f5f2eb;
+    font-family: 'IBM Plex Sans', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px 60px;
+  }
+  h1 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 32px;
+  }
+  svg { max-width: 680px; width: 100%; height: auto; filter: drop-shadow(0 4px 24px rgba(0,0,0,0.07)); }
+</style>
+</head>
+<body>
+<h1>APS145 — Flowchart v2: Game Config (Composed)</h1>
+
+<svg viewBox="0 0 660 1120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#1a1a1a"/>
+    </marker>
+  </defs>
+
+  <!-- ─── helper styles via inline attrs (SVG has no class cascade for fonts) ─── -->
+
+  <!-- ════════════════════════════════════════════════════════════
+       ROW 1 — Three sub-structures side by side
+       MapSize @ x=30   EnemyConfig @ x=240   GameRules @ x=450
+       Each: w=160 h=~110
+  ════════════════════════════════════════════════════════════ -->
+
+  <!-- MapSize -->
+  <rect x="30" y="40" width="160" height="105" fill="white" stroke="#1a1a1a" stroke-width="2"/>
+  <rect x="30" y="40" width="160" height="22" fill="#1a1a1a"/>
+  <text x="110" y="56" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700" fill="#f5f2eb">DEFINE: MapSize</text>
+  <text x="50" y="80"  font-family="JetBrains Mono,monospace" font-size="10" fill="#333">-  rows</text>
+  <text x="50" y="98"  font-family="JetBrains Mono,monospace" font-size="10" fill="#333">-  cols</text>
+  <text x="50" y="132" font-family="IBM Plex Sans,sans-serif" font-size="9" fill="#999" font-style="italic">map dimensions</text>
+
+  <!-- EnemyConfig -->
+  <rect x="250" y="40" width="160" height="105" fill="white" stroke="#1a1a1a" stroke-width="2"/>
+  <rect x="250" y="40" width="160" height="22" fill="#1a1a1a"/>
+  <text x="330" y="56" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="700" fill="#f5f2eb">DEFINE: EnemyConfig</text>
+  <text x="270" y="80"  font-family="JetBrains Mono,monospace" font-size="10" fill="#333">-  count</text>
+  <text x="270" y="98"  font-family="JetBrains Mono,monospace" font-size="10" fill="#333">-  minDefeatsToProgress</text>
+  <text x="270" y="132" font-family="IBM Plex Sans,sans-serif" font-size="9" fill="#999" font-style="italic">enemy settings</text>
+
+  <!-- GameRules -->
+  <rect x="470" y="40" width="160" height="105" fill="white" stroke="#1a1a1a" stroke-width="2"/>
+  <rect x="470" y="40" width="160" height="22" fill="#1a1a1a"/>
+  <text x="550" y="56" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700" fill="#f5f2eb">DEFINE: GameRules</text>
+  <text x="490" y="80"  font-family="JetBrains Mono,monospace" font-size="10" fill="#333">-  numLives</text>
+  <text x="490" y="98"  font-family="JetBrains Mono,monospace" font-size="10" fill="#333">-  timeLimitSecs</text>
+  <text x="490" y="116" font-family="JetBrains Mono,monospace" font-size="10" fill="#333">-  numLevels</text>
+  <text x="490" y="136" font-family="IBM Plex Sans,sans-serif" font-size="9" fill="#999" font-style="italic">session / progression</text>
+
+  <!-- ════════════════════════════════════════════════════════════
+       Convergence lines: all three sub-structs feed into GameConfig
+       Lines go down from bottom-center of each sub-struct to a
+       horizontal connector bar, then down to GameConfig
+  ════════════════════════════════════════════════════════════ -->
+
+  <!-- MapSize bottom-center → down to y=190 -->
+  <line x1="110" y1="145" x2="110" y2="200" stroke="#1a1a1a" stroke-width="1.5"/>
+  <!-- EnemyConfig bottom-center → down to y=190 -->
+  <line x1="330" y1="145" x2="330" y2="200" stroke="#1a1a1a" stroke-width="1.5"/>
+  <!-- GameRules bottom-center → down to y=190 -->
+  <line x1="550" y1="145" x2="550" y2="200" stroke="#1a1a1a" stroke-width="1.5"/>
+  <!-- Horizontal connector bar -->
+  <line x1="110" y1="200" x2="550" y2="200" stroke="#1a1a1a" stroke-width="1.5"/>
+  <!-- Down from bar midpoint to GameConfig -->
+  <line x1="330" y1="200" x2="330" y2="238" stroke="#1a1a1a" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- ════════════════════════════════════════════════════════════
+       GameConfig — composed structure
+  ════════════════════════════════════════════════════════════ -->
+  <rect x="170" y="240" width="320" height="145" fill="white" stroke="#1a1a1a" stroke-width="2"/>
+  <rect x="170" y="240" width="320" height="22" fill="#1a1a1a"/>
+  <text x="330" y="256" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700" fill="#f5f2eb">DEFINE: GameConfig</text>
+
+  <text x="195" y="282" font-family="JetBrains Mono,monospace" font-size="10" fill="#333">-  playerName</text>
+  <text x="195" y="300" font-family="JetBrains Mono,monospace" font-size="10" fill="#333">-  map</text>
+  <text x="340" y="300" font-family="IBM Plex Sans,sans-serif" font-size="9" fill="#888" font-style="italic">(type: MapSize)</text>
+  <text x="195" y="318" font-family="JetBrains Mono,monospace" font-size="10" fill="#333">-  enemies</text>
+  <text x="340" y="318" font-family="IBM Plex Sans,sans-serif" font-size="9" fill="#888" font-style="italic">(type: EnemyConfig)</text>
+  <text x="195" y="336" font-family="JetBrains Mono,monospace" font-size="10" fill="#333">-  rules</text>
+  <text x="340" y="336" font-family="IBM Plex Sans,sans-serif" font-size="9" fill="#888" font-style="italic">(type: GameRules)</text>
+  <text x="195" y="370" font-family="IBM Plex Sans,sans-serif" font-size="9" fill="#999" font-style="italic">top-level config — composes all sub-types</text>
+
+  <!-- Arrow down to START terminal -->
+  <line x1="330" y1="385" x2="330" y2="430" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- ════════════════════════════════════════════════════════════
+       START terminal
+  ════════════════════════════════════════════════════════════ -->
+  <ellipse cx="330" cy="455" rx="80" ry="28" fill="#1a1a1a"/>
+  <text x="330" y="459" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="600" fill="#f5f2eb">main()</text>
+
+  <!-- Arrow -->
+  <line x1="330" y1="483" x2="330" y2="522" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- ════════════════════════════════════════════════════════════
+       DECLARE step
+  ════════════════════════════════════════════════════════════ -->
+  <rect x="150" y="525" width="360" height="60" fill="white" stroke="#1a1a1a" stroke-width="2"/>
+  <text x="330" y="549" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="600" fill="#1a1a1a">DECLARE:</text>
+  <text x="330" y="571" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-size="10.5" fill="#444">config = EMPTY  (type: GameConfig)</text>
+
+  <!-- Arrow -->
+  <line x1="330" y1="585" x2="330" y2="624" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- ════════════════════════════════════════════════════════════
+       END terminal
+  ════════════════════════════════════════════════════════════ -->
+  <ellipse cx="330" cy="648" rx="80" ry="28" fill="#1a1a1a"/>
+  <text x="330" y="652" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="600" fill="#f5f2eb">End</text>
+
+  <!-- ════════════════════════════════════════════════════════════
+       LEGEND
+  ════════════════════════════════════════════════════════════ -->
+  <line x1="60" y1="710" x2="600" y2="710" stroke="#ddd" stroke-width="1"/>
+  <text x="330" y="732" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-size="10" fill="#bbb" letter-spacing="0.1em">LEGEND</text>
+
+  <!-- Terminal -->
+  <ellipse cx="110" cy="770" rx="42" ry="18" fill="#1a1a1a"/>
+  <text x="110" y="774" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#f5f2eb">Start / End</text>
+  <text x="110" y="800" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-size="8" fill="#aaa">Terminal</text>
+
+  <!-- Striped rect -->
+  <rect x="210" y="752" width="110" height="36" fill="white" stroke="#1a1a1a" stroke-width="1.5"/>
+  <rect x="210" y="752" width="110" height="13" fill="#1a1a1a"/>
+  <text x="265" y="762" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7.5" fill="#f5f2eb">Structure Def</text>
+  <text x="265" y="779" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-size="8.5" fill="#555">(complex block)</text>
+  <text x="265" y="800" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-size="8" fill="#aaa">Striped Rectangle</text>
+
+  <!-- Plain rect -->
+  <rect x="370" y="752" width="110" height="36" fill="white" stroke="#1a1a1a" stroke-width="1.5"/>
+  <text x="425" y="775" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-size="8.5" fill="#333">Process / Action</text>
+  <text x="425" y="800" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-size="8" fill="#aaa">Rectangle</text>
+
+  <!-- Composition note -->
+  <text x="330" y="840" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-size="9" fill="#aaa" font-style="italic">Convergence lines show MapSize, EnemyConfig, GameRules compose into GameConfig</text>
+</svg>
+
+</body>
+</html>

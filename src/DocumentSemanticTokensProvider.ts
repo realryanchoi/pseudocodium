@@ -1,6 +1,4 @@
 import * as vscode from "vscode";
-import * as path from "path";
-import * as os from "os";
 import { TokenInterface, IndexInterface } from "./interfaces";
 import { tokenCodes } from "./tokenTypes";
 import { FileDirectives, parseDirectives } from "./FileDirectiveParser";
@@ -109,32 +107,7 @@ export class DocumentSemanticTokensProvider implements vscode.DocumentSemanticTo
             layers.push(this.baseIndex);
         }
 
-        const docDir = path.dirname(document.uri.fsPath);
-        for (const rawPath of directives.extends) {
-            const resolved = this._resolvePath(rawPath, docDir);
-            const conf = await Config.loadFromPath(resolved);
-            if (conf.custom !== undefined) {
-                layers.push(conf.custom);
-            }
-        }
-
         return Config.mergeIndexes(...layers);
-    }
-
-    /**
-     * Resolves a path from a directive.
-     * - `~/…` expands to the home directory.
-     * - Absolute paths are used as-is.
-     * - Relative paths resolve against `docDir`.
-     */
-    private _resolvePath(rawPath: string, docDir: string): string {
-        if (rawPath.startsWith("~/") || rawPath === "~") {
-            return path.join(os.homedir(), rawPath.slice(2));
-        }
-        if (path.isAbsolute(rawPath)) {
-            return rawPath;
-        }
-        return path.resolve(docDir, rawPath);
     }
 
     /**

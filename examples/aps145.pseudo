@@ -1,4 +1,4 @@
-// @standard: aps145
+@aps145
 
 ----------------------------------------------------------------
 Description/Purpose:
@@ -7,7 +7,7 @@ Description/Purpose:
 Argument(s) : NONE
 Return Value: NONE
 ----------------------------------------------------------------
-main()
+START main()
 1. DECLARE:
   students = EMPTY (Collection of type: SenecaStudent)
   continueAdding = TRUE
@@ -28,7 +28,7 @@ Description/Purpose:
 Argument(s) : students (Collection of type: SenecaStudent)
 Return Value: Nothing
 ----------------------------------------------------------------
-AddStudent (students)
+AddProfessors (professors)
 1. DECLARE:
   newStudent (Type: SenecaStudent)
   studentID

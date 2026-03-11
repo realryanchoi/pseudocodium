@@ -28,13 +28,15 @@ export function activate(context: vscode.ExtensionContext) {
 
         DocSemTokProv.baseIndex = baseIndex;
 
-        context.subscriptions.push(
-            vscode.languages.registerDocumentSemanticTokensProvider(
-                { language: "pseudocode" },
-                DocSemTokProv,
-                legend
-            )
-        );
+        for (const lang of ["pseudocode", "aps145-pseudocode"]) {
+            context.subscriptions.push(
+                vscode.languages.registerDocumentSemanticTokensProvider(
+                    { language: lang },
+                    DocSemTokProv,
+                    legend
+                )
+            );
+        }
     });
 
     // Command: generate and preview a Mermaid flowchart for the active pseudocode file
@@ -42,10 +44,10 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand("pseudocodium.previewFlowchart", () => {
             const editor = vscode.window.activeTextEditor;
             if (!editor) {
-                vscode.window.showWarningMessage("Open a .pseudo file first.");
+                vscode.window.showWarningMessage("Open a pseudocode file first.");
                 return;
             }
-            FlowchartPanel.createOrShow(editor.document.getText());
+            FlowchartPanel.createOrShow(editor.document.getText(), editor.document.languageId);
         })
     );
 }

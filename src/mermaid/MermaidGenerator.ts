@@ -8,7 +8,7 @@ import {
     ParsedFunction,
     ParsedStep,
     ParsedBranch,
-} from './Aps145Parser';
+} from './ParsedTypes';
 
 export interface FunctionChart {
     title: string;
@@ -47,12 +47,12 @@ function escLabel(text: string): string {
         .replace(/<([^>]*)>/g, '[$1]') // <varName> → [varName] (interpolation)
         .replace(/\{/g, '(')          // avoid Mermaid diamond confusion
         .replace(/\}/g, ')')
-        .replace(/\n|\r/g, ' ');
+        .replace(/\r/g, '');
 }
 
 /** Mermaid node shape markup for a given step. */
 function nodeMarkup(id: string, step: ParsedStep): string {
-    const lbl = escLabel(step.label);
+    const lbl = escLabel(step.label).replace(/\n/g, '<br/>');
     switch (step.type) {
         case 'decision': return `${id}{"${lbl}"}`;
         case 'end':      return `${id}(["${lbl}"])`;

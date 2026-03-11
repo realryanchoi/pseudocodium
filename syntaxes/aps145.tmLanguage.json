@@ -1,0 +1,136 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "APS145 Pseudocode",
+	"scopeName": "source.pseudocode.aps145",
+	"patterns": [
+		{ "include": "#directive" },
+		{ "include": "#comments" },
+		{ "include": "#doc-block" },
+		{ "include": "#aps145-keywords" },
+		{ "include": "#step-numbers" },
+		{ "include": "#substep-letters" },
+		{ "include": "#collection-methods" },
+		{ "include": "#interpolation" },
+		{ "include": "#ui-elements" },
+		{ "include": "#type-annotations" },
+		{ "include": "#strings" },
+		{ "include": "#numbers" },
+		{ "include": "#bools" },
+		{ "include": "#function-call" }
+	],
+	"repository": {
+		"directive": {
+			"match": "^@(aps145|default)\\s*$",
+			"captures": {
+				"1": { "name": "keyword.other.directive.pseudocode" }
+			}
+		},
+		"comments": {
+			"patterns": [
+				{
+					"name": "comment.line.double-slash.pseudocode",
+					"match": "\\/\\/.*"
+				},
+				{
+					"name": "comment.block.pseudocode",
+					"begin": "/\\*",
+					"end": "\\*/"
+				}
+			]
+		},
+		"doc-block": {
+			"patterns": [
+				{
+					"name": "comment.block.documentation.aps145",
+					"match": "^-{3,}\\s*$"
+				},
+				{
+					"match": "^(Description|Arguments|Return Value)\\s*:",
+					"captures": {
+						"1": { "name": "keyword.other.documentation.aps145" }
+					}
+				}
+			]
+		},
+		"aps145-keywords": {
+			"patterns": [
+				{
+					"match": "\\b(REPEAT):\\s+(from Step)\\s+(#\\d+)",
+					"captures": {
+						"1": { "name": "keyword.control.aps145" },
+						"2": { "name": "keyword.other.aps145" },
+						"3": { "name": "constant.numeric.step-reference.aps145" }
+					}
+				},
+				{
+					"name": "keyword.control.aps145",
+					"match": "\\b(DECLARE|ASSIGN|DISPLAY|CALL|RETURN|REPEAT|END|End)\\b"
+				}
+			]
+		},
+		"step-numbers": {
+			"match": "^(\\s*)(\\d+)\\.",
+			"captures": {
+				"2": { "name": "constant.numeric.step.aps145" }
+			}
+		},
+		"substep-letters": {
+			"match": "^(\\s+)([A-Z])\\.",
+			"captures": {
+				"2": { "name": "constant.character.substep.aps145" }
+			}
+		},
+		"collection-methods": {
+			"match": "\\.(ADD|NEXT|DELETE|COUNT)\\b",
+			"captures": {
+				"1": { "name": "support.function.builtin.aps145" }
+			}
+		},
+		"interpolation": {
+			"name": "variable.other.interpolated.aps145",
+			"match": "<[a-zA-Z_][a-zA-Z0-9_.]*>"
+		},
+		"ui-elements": {
+			"name": "string.other.ui-element.aps145",
+			"match": "\\[(BUTTON:[^\\]]*|User entered value)\\]"
+		},
+		"type-annotations": {
+			"match": "\\((Type|Collection of type):\\s*([a-zA-Z_][a-zA-Z0-9_]*)\\)",
+			"captures": {
+				"1": { "name": "storage.type.annotation.aps145" },
+				"2": { "name": "entity.name.type.aps145" }
+			}
+		},
+		"strings": {
+			"name": "string.quoted.double.pseudocode",
+			"begin": "\"",
+			"end": "\""
+		},
+		"numbers": {
+			"patterns": [
+				{
+					"name": "constant.numeric.integer.pseudocode",
+					"match": "\\b[0-9]+(?![0-9]*\\.)\\b"
+				},
+				{
+					"name": "constant.numeric.float.pseudocode",
+					"match": "\\b[0-9]+\\.[0-9]+\\b"
+				}
+			]
+		},
+		"bools": {
+			"patterns": [
+				{
+					"name": "constant.language.pseudocode",
+					"match": "(?i)\\b(true|false|null)\\b"
+				}
+			]
+		},
+		"function-call": {
+			"match": "([a-zA-Z_][a-zA-Z0-9_]*)(?= *\\(.*?\\))",
+			"captures": {
+				"1": { "name": "entity.name.function.aps145" }
+			}
+		}
+	}
+}

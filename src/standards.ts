@@ -19,10 +19,10 @@ export const STANDARDS: Record<string, IndexInterface> = {
     },
 
     /**
-     * Modern industry pseudocode conventions.
+     * Default (C-style) pseudocode conventions.
      * Covers structured control flow, OOP, I/O, and boolean logic.
      */
-    modern: {
+    default: {
         keyword: [
             "BEGIN", "END",
             "IF", "THEN", "ELSE", "END IF",

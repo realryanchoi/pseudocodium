@@ -3,37 +3,15 @@
  * Handles function headers, numbered steps, decision branches, and REPEAT loops.
  */
 
-export interface ParsedDocument {
-    functions: ParsedFunction[];
-}
+import type {
+    ParsedDocument,
+    ParsedFunction,
+    ParsedStep,
+    ParsedBranch,
+    StepType,
+} from './ParsedTypes';
 
-export interface ParsedFunction {
-    name: string;
-    params: string;
-    steps: ParsedStep[];
-}
-
-export type StepType =
-    | 'declare' | 'assign' | 'display' | 'call' | 'return'
-    | 'repeat'  | 'end'    | 'decision' | 'statement';
-
-export interface ParsedStep {
-    stepNum: number;
-    type: StepType;
-    label: string;
-    /** Set for type === 'repeat': the step number to loop back to */
-    repeatTarget?: number;
-    /** Set for type === 'decision': the branches under this decision */
-    branches?: ParsedBranch[];
-}
-
-export interface ParsedBranch {
-    /** Capital letter: A, B, C... */
-    letter: string;
-    /** The case label: YES, NO, or a descriptive string */
-    label: string;
-    steps: ParsedStep[];
-}
+export type { ParsedDocument, ParsedFunction, ParsedStep, ParsedBranch, StepType } from './ParsedTypes';
 
 // ---------------------------------------------------------------------------
 // Internal helpers
@@ -44,7 +22,7 @@ function getIndent(line: string): number {
 }
 
 function isSeparatorLine(trimmed: string): boolean {
-    return /^-{10,}\s*$/.test(trimmed);
+    return /^-{3,}\s*$/.test(trimmed);
 }
 
 /** Match a function header at column 0: Identifier(...) */
@@ -169,14 +147,13 @@ function parseTopLevelSteps(
             }
 
             // Merge continuation content into the label:
-            // - If the step line had no inline content, use the first continuation line.
+            // - If the step line had no inline content, join all continuation lines.
             // - If the step is a bare keyword ending in ":" (e.g. "DISPLAY:", "DECLARE:"),
-            //   append the first continuation line so consecutive same-keyword nodes are
-            //   distinguishable in the flowchart.
+            //   append all continuation lines so the node shows every variable/value.
             if (!content && contLines.length > 0) {
-                content = contLines[0];
+                content = contLines.join('\n');
             } else if (contLines.length > 0 && /^[A-Z]+:\s*$/.test(content)) {
-                content = content + ' ' + contLines[0];
+                content = content + '\n' + contLines.join('\n');
             }
 
             const step = makeStep(stepNum, content);
@@ -269,18 +246,20 @@ function parseSubSteps(
             i++;
 
             // Collect continuation lines for the sub-step
+            const subContLines: string[] = [];
             while (i < lines.length) {
                 const cont        = lines[i];
                 const contTrimmed = cont.trimStart();
                 const contInd     = getIndent(cont);
-                if (!contTrimmed)         { i++; continue; }
-                if (contInd <= ind)       { break; }
-                if (!ssContent) {
-                    ssContent = contTrimmed;
-                } else if (/^[A-Z]+:\s*$/.test(ssContent)) {
-                    ssContent = ssContent + ' ' + contTrimmed;
-                }
+                if (!contTrimmed)   { i++; continue; }
+                if (contInd <= ind) { break; }
+                subContLines.push(contTrimmed);
                 i++;
+            }
+            if (!ssContent && subContLines.length > 0) {
+                ssContent = subContLines.join('\n');
+            } else if (subContLines.length > 0 && /^[A-Z]+:\s*$/.test(ssContent)) {
+                ssContent = ssContent + '\n' + subContLines.join('\n');
             }
 
             steps.push(makeStep(ssNum, ssContent));

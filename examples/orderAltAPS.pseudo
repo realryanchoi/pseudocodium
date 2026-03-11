@@ -1,0 +1,62 @@
+@aps145
+
+---
+Description:
+    Collects customer and product information to populate
+    and return a fully completed Order.
+Argument(s): order (type: Order)
+Return: NONE
+---
+CreateOrder(order)
+1. DISPLAY:
+    "Enter first name:"
+2. ASSIGN: order.customer.firstName = [user entered value]
+
+3. DISPLAY:
+    "Enter last name:"
+4. ASSIGN: order.customer.lastName = [user entered value]
+
+5. DISPLAY:
+    "Enter email:"
+6. ASSIGN: order.customer.email = [user entered value]
+
+7. DISPLAY:
+    "Enter street number:"
+8. ASSIGN: order.customer.address.streetNum = [user entered value]
+
+9. DISPLAY:
+    "Enter street name:"
+10. ASSIGN: order.customer.address.streetName = [user entered value]
+
+11. DISPLAY:
+    "Enter apt/unit (if any):"
+12. ASSIGN: order.customer.address.aptUnit = [user entered value]
+
+13. DISPLAY:
+    "Enter city:"
+14. ASSIGN: order.customer.address.city = [user entered value]
+
+15. DISPLAY:
+    "Enter province:"
+16. ASSIGN: order.customer.address.province = [user entered value]
+
+17. DISPLAY:
+    "Enter postal code:"
+18. ASSIGN: order.customer.address.postalCode = [user entered value]
+
+19. DISPLAY:
+    "Enter country:"
+20. ASSIGN: order.customer.address.country = [user entered value]
+
+21. ASSIGN: order.product = CALL: GetProductSelection()
+
+22. DISPLAY:
+    "Enter quantity:"
+23. ASSIGN: order.quantity = [user entered value]
+
+24. ASSIGN: order.orderID     = [system generated value]
+25. ASSIGN: order.orderDate   = NOW
+26. ASSIGN: order.status      = "Pending"
+27. ASSIGN: order.trackingNum = [system generated value]
+
+28. End
