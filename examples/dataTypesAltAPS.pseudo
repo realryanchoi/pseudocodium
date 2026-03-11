@@ -1,0 +1,30 @@
+@aps145
+
+---
+
+---
+
+MapSize
+- rows
+- cols
+
+EnemyConfig
+- count
+- minDefeatsToProgress
+
+GameRules
+- numLives
+- timeLimitSecs
+- numLevels
+
+GameConfig
+- playerName
+- map        (type: MapSize)
+- enemies    (type: EnemyConfig)
+- rules      (type: GameRules)
+
+main()
+1. DECLARE:
+    config = EMPTY (type: GameConfig)
+
+2. End

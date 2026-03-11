@@ -1,0 +1,32 @@
+@aps145
+
+---
+Description/Purpose:
+Provides a user with food options for their order and guides them to specialize their preferences related to their choice concluding with the order details being displayed.
+
+Argument: NONE
+Return: NONE
+---
+
+OrderFood()
+
+1. DECLARE:
+    isIceCream=FALSE
+    flavour=NULL
+    toppings=NULL
+    coneType=NULL
+    cupSize=NULL
+    burgerType=FALSE
+    sideOption=FALSE
+    sauce=FALSE
+    spiciness=FALSE
+    mayoType=FALSE
+    beefOzSize=FALSE
+    withCheese=FALSE
+
+2. DISPLAY:
+    "What food do you want to order?"
+    [BUTTON: Ice Cream]
+    [BUTTON: Burger]
+    
+3. QUERY: 

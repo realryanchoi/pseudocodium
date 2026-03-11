@@ -1,0 +1,21 @@
+@aps145
+
+---
+
+---
+
+GameConfig
+- playerName
+- mapRows
+- mapCols
+- numEnemies
+- numLives
+- minEnemyDefeats
+- timeLimitSecs
+- numLevels
+
+main()
+1. DECLARE:
+    config = EMPTY (type: GameConfig)
+
+2. End

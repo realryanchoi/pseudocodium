@@ -1,0 +1,40 @@
+@aps145
+
+---
+
+---
+
+ShipAddress
+- streetNum
+- streetName
+- aptUnit
+- city
+- province
+- postalCode
+- country
+
+Customer
+- firstName
+- lastName
+- email
+- address    (type: ShipAddress)
+
+Product
+- productID
+- name
+- price
+
+Order
+- orderID
+- orderDate
+- quantity
+- status
+- trackingNum
+- customer   (type: Customer)
+- product    (type: Product)
+
+main()
+1. DECLARE:
+    order = EMPTY (type: Order)
+
+2. End

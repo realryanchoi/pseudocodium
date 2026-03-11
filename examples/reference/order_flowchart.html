@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Amazon Order – APS145 Flowchart</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #f5f2eb;
+    font-family: 'IBM Plex Sans', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px 60px;
+  }
+  h1 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 32px;
+  }
+  svg { max-width: 780px; width: 100%; height: auto; filter: drop-shadow(0 4px 24px rgba(0,0,0,0.07)); }
+</style>
+</head>
+<body>
+<h1>APS145 — Flowchart: Amazon Order Structures</h1>
+
+<svg viewBox="0 0 760 1180" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+    <polygon points="0 0,8 3,0 6" fill="#1a1a1a"/>
+  </marker>
+</defs>
+
+<!-- ══════════════════════════════════════════════════════
+     ROW 1 — Three independent sub-structures
+     ShipAddress  x=20   Product  x=290   (Customer will reference ShipAddress)
+     Layout: ShipAddress @ left, Product @ right, Customer @ center bottom of row
+══════════════════════════════════════════════════════ -->
+
+<!-- ShipAddress  w=200 h=170 -->
+<rect x="20"  y="30" width="200" height="170" fill="white" stroke="#1a1a1a" stroke-width="2"/>
+<rect x="20"  y="30" width="200" height="22"  fill="#1a1a1a"/>
+<text x="120" y="46" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10.5" font-weight="700" fill="#f5f2eb">DEFINE: ShipAddress</text>
+<text x="40"  y="72"  font-family="JetBrains Mono,monospace" font-size="10" fill="#333">-  streetNum</text>
+<text x="40"  y="89"  font-family="JetBrains Mono,monospace" font-size="10" fill="#333">-  streetName</text>
+<text x="40"  y="106" font-family="JetBrains Mono,monospace" font-size="10" fill="#333">-  aptUnit</text>
+<text x="40"  y="123" font-family="JetBrains Mono,monospace" font-size="10" fill="#333">-  city</text>
+<text x="40"  y="140" font-family="JetBrains Mono,monospace" font-size="10" fill="#333">-  province</text>
+<text x="40"  y="157" font-family="JetBrains Mono,monospace" font-size="10" fill="#333">-  postalCode</text>
+<text x="40"  y="174" font-family="JetBrains Mono,monospace" font-size="10" fill="#333">-  country</text>
+<text x="40"  y="192" font-family="IBM Plex Sans,sans-serif" font-size="9" fill="#999" font-style="italic">delivery destination</text>
+
+<!-- Product  w=200 h=120 -->
+<rect x="540" y="30" width="200" height="120" fill="white" stroke="#1a1a1a" stroke-width="2"/>
+<rect x="540" y="30" width="200" height="22"  fill="#1a1a1a"/>
+<text x="640" y="46" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700" fill="#f5f2eb">DEFINE: Product</text>
+<text x="560" y="72"  font-family="JetBrains Mono,monospace" font-size="10" fill="#333">-  productID</text>
+<text x="560" y="89"  font-family="JetBrains Mono,monospace" font-size="10" fill="#333">-  name</text>
+<text x="560" y="106" font-family="JetBrains Mono,monospace" font-size="10" fill="#333">-  price</text>
+<text x="560" y="140" font-family="IBM Plex Sans,sans-serif" font-size="9" fill="#999" font-style="italic">item being purchased</text>
+
+<!-- ══════════════════════════════════════════════════════
+     ROW 2 — Customer (composes ShipAddress)
+     Centered at x=280, sits below ShipAddress
+══════════════════════════════════════════════════════ -->
+
+<!-- Arrow: ShipAddress → Customer -->
+<line x1="120" y1="200" x2="120" y2="240" stroke="#1a1a1a" stroke-width="1.5"/>
+<line x1="120" y1="240" x2="280" y2="240" stroke="#1a1a1a" stroke-width="1.5"/>
+<line x1="280" y1="240" x2="280" y2="258" stroke="#1a1a1a" stroke-width="1.5" marker-end="url(#arr)"/>
+
+<!-- Customer  w=230 h=150 -->
+<rect x="165" y="260" width="230" height="150" fill="white" stroke="#1a1a1a" stroke-width="2"/>
+<rect x="165" y="260" width="230" height="22"  fill="#1a1a1a"/>
+<text x="280" y="276" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700" fill="#f5f2eb">DEFINE: Customer</text>
+<text x="185" y="302" font-family="JetBrains Mono,monospace" font-size="10" fill="#333">-  firstName</text>
+<text x="185" y="319" font-family="JetBrains Mono,monospace" font-size="10" fill="#333">-  lastName</text>
+<text x="185" y="336" font-family="JetBrains Mono,monospace" font-size="10" fill="#333">-  email</text>
+<text x="185" y="353" font-family="JetBrains Mono,monospace" font-size="10" fill="#333">-  address</text>
+<text x="315" y="353" font-family="IBM Plex Sans,sans-serif" font-size="9" fill="#888" font-style="italic">(type: ShipAddress)</text>
+<text x="185" y="398" font-family="IBM Plex Sans,sans-serif" font-size="9" fill="#999" font-style="italic">who placed the order</text>
+
+<!-- ══════════════════════════════════════════════════════
+     ROW 3 — Order (top-level, composes Customer + Product)
+     Centered at x=380
+══════════════════════════════════════════════════════ -->
+
+<!-- Convergence: Customer bottom → down, Product bottom → down, meet at y=480, join to Order -->
+<line x1="280" y1="410" x2="280" y2="480" stroke="#1a1a1a" stroke-width="1.5"/>
+<line x1="640" y1="150" x2="640" y2="480" stroke="#1a1a1a" stroke-width="1.5"/>
+<line x1="280" y1="480" x2="640" y2="480" stroke="#1a1a1a" stroke-width="1.5"/>
+<line x1="460" y1="480" x2="460" y2="515" stroke="#1a1a1a" stroke-width="1.5" marker-end="url(#arr)"/>
+
+<!-- Order  w=340 h=200 -->
+<rect x="290" y="518" width="340" height="200" fill="white" stroke="#1a1a1a" stroke-width="2"/>
+<rect x="290" y="518" width="340" height="22"  fill="#1a1a1a"/>
+<text x="460" y="534" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700" fill="#f5f2eb">DEFINE: Order</text>
+<text x="310" y="560" font-family="JetBrains Mono,monospace" font-size="10" fill="#333">-  orderID</text>
+<text x="310" y="577" font-family="JetBrains Mono,monospace" font-size="10" fill="#333">-  orderDate</text>
+<text x="310" y="594" font-family="JetBrains Mono,monospace" font-size="10" fill="#333">-  quantity</text>
+<text x="310" y="611" font-family="JetBrains Mono,monospace" font-size="10" fill="#333">-  status</text>
+<text x="310" y="628" font-family="JetBrains Mono,monospace" font-size="10" fill="#333">-  trackingNum</text>
+<text x="310" y="645" font-family="JetBrains Mono,monospace" font-size="10" fill="#333">-  customer</text>
+<text x="450" y="645" font-family="IBM Plex Sans,sans-serif" font-size="9" fill="#888" font-style="italic">(type: Customer)</text>
+<text x="310" y="662" font-family="JetBrains Mono,monospace" font-size="10" fill="#333">-  product</text>
+<text x="450" y="662" font-family="IBM Plex Sans,sans-serif" font-size="9" fill="#888" font-style="italic">(type: Product)</text>
+<text x="310" y="706" font-family="IBM Plex Sans,sans-serif" font-size="9" fill="#999" font-style="italic">top-level transaction record</text>
+
+<!-- Arrow to main() START -->
+<line x1="460" y1="718" x2="460" y2="758" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arr)"/>
+
+<!-- ══════════════════════════════════════════════════════
+     main() START terminal
+══════════════════════════════════════════════════════ -->
+<ellipse cx="460" cy="782" rx="80" ry="28" fill="#1a1a1a"/>
+<text x="460" y="786" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="600" fill="#f5f2eb">main()</text>
+
+<!-- Arrow -->
+<line x1="460" y1="810" x2="460" y2="848" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arr)"/>
+
+<!-- DECLARE -->
+<rect x="270" y="851" width="380" height="60" fill="white" stroke="#1a1a1a" stroke-width="2"/>
+<text x="460" y="875" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="600" fill="#1a1a1a">DECLARE:</text>
+<text x="460" y="897" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-size="10.5" fill="#444">order = EMPTY  (type: Order)</text>
+
+<!-- Arrow -->
+<line x1="460" y1="911" x2="460" y2="950" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arr)"/>
+
+<!-- END terminal -->
+<ellipse cx="460" cy="974" rx="80" ry="28" fill="#1a1a1a"/>
+<text x="460" y="978" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="600" fill="#f5f2eb">End</text>
+
+<!-- ══════════════════════════════════════════════════════
+     LEGEND
+══════════════════════════════════════════════════════ -->
+<line x1="40" y1="1035" x2="720" y2="1035" stroke="#ddd" stroke-width="1"/>
+<text x="380" y="1057" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-size="10" fill="#bbb" letter-spacing="0.1em">LEGEND</text>
+
+<ellipse cx="120" cy="1095" rx="42" ry="18" fill="#1a1a1a"/>
+<text x="120" y="1099" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#f5f2eb">Start / End</text>
+<text x="120" y="1124" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-size="8" fill="#aaa">Terminal</text>
+
+<rect x="230" y="1077" width="120" height="36" fill="white" stroke="#1a1a1a" stroke-width="1.5"/>
+<rect x="230" y="1077" width="120" height="13" fill="#1a1a1a"/>
+<text x="290" y="1087" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7.5" fill="#f5f2eb">Structure Def</text>
+<text x="290" y="1104" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-size="8.5" fill="#555">(complex block)</text>
+<text x="290" y="1124" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-size="8" fill="#aaa">Striped Rectangle</text>
+
+<rect x="410" y="1077" width="120" height="36" fill="white" stroke="#1a1a1a" stroke-width="1.5"/>
+<text x="470" y="1100" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-size="8.5" fill="#333">Process / Action</text>
+<text x="470" y="1124" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-size="8" fill="#aaa">Rectangle</text>
+
+<text x="380" y="1155" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-size="9" fill="#aaa" font-style="italic">Convergence lines show composition: ShipAddress → Customer → Order ← Product</text>
+
+</svg>
+</body>
+</html>
