@@ -1,8 +1,12 @@
 .vscode/**
 .vscode-test/**
+.git/**
 .gitignore
 src/**
 tsconfig.json
 package-lock.json
-example.pseudo
-vsc-extension-quickstart.md
+node_modules/**
+*.vsix
+examples/**
+FLOWCHART.md
+CLAUDE.md
