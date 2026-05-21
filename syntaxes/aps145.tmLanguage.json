@@ -45,9 +45,9 @@
 					"match": "^-{3,}\\s*$"
 				},
 				{
-					"match": "^(Description|Arguments|Return Value)\\s*:",
+					"match": "^(DESCRIPTION|ARGUMENTS|RETURN)\\s*:",
 					"captures": {
-						"1": { "name": "keyword.other.documentation.aps145" }
+						"1": { "name": "keyword.control.documentation.aps145" }
 					}
 				}
 			]
@@ -63,8 +63,15 @@
 					}
 				},
 				{
+					"match": "\\b(DECLARE)\\s+(int|float|double|char|string|bool|struct|collection|array|object)\\b",
+					"captures": {
+						"1": { "name": "keyword.control.aps145" },
+						"2": { "name": "storage.type.aps145" }
+					}
+				},
+				{
 					"name": "keyword.control.aps145",
-					"match": "\\b(DECLARE|ASSIGN|DISPLAY|CALL|RETURN|REPEAT|END|End)\\b"
+					"match": "\\b(ASSIGN|DISPLAY|CALL|RETURN|REPEAT|END|End)\\b"
 				}
 			]
 		},

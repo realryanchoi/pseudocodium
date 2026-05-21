@@ -88,6 +88,10 @@ function branchTerminates(branch: ParsedBranch): boolean {
 function generateFunctionChart(fn: ParsedFunction): string {
     const fnPrefix = fn.name;
 
+    // Separate declarations from the flow steps
+    const declareSteps = fn.steps.filter(s => s.type === 'declare');
+    const flowSteps    = fn.steps.filter(s => s.type !== 'declare');
+
     // Build a map from step number → stable node ID for REPEAT targeting.
     const topStepIds = new Map<number, string>();
     for (const step of fn.steps) {
@@ -97,13 +101,19 @@ function generateFunctionChart(fn: ParsedFunction): string {
     const defs:  string[] = [];
     const edges: string[] = [];
 
+    // Declare nodes (disconnected, rendered above the flow)
+    for (const step of declareSteps) {
+        const id = topStepIds.get(step.stepNum)!;
+        defs.push(`    ${nodeMarkup(id, step)}`);
+    }
+
     // Start (terminal) node
     const startId  = nodeId(fnPrefix, 'start');
     const startLbl = escLabel(`${fn.name}(${fn.params})`);
     defs.push(`    ${startId}(["${startLbl}"])`);
 
-    // Declare all top-level step nodes
-    for (const step of fn.steps) {
+    // Declare all flow step nodes
+    for (const step of flowSteps) {
         const id = topStepIds.get(step.stepNum)!;
         defs.push(`    ${nodeMarkup(id, step)}`);
 
@@ -118,17 +128,17 @@ function generateFunctionChart(fn: ParsedFunction): string {
         }
     }
 
-    // Edge: start → first step
-    if (fn.steps.length > 0) {
-        const firstId = topStepIds.get(fn.steps[0].stepNum)!;
+    // Edge: start → first flow step (skip declarations)
+    if (flowSteps.length > 0) {
+        const firstId = topStepIds.get(flowSteps[0].stepNum)!;
         edges.push(`    ${startId} --> ${firstId}`);
     }
 
-    // Edges between top-level steps
-    for (let i = 0; i < fn.steps.length; i++) {
-        const step   = fn.steps[i];
+    // Edges between flow steps only (declarations have no arrows)
+    for (let i = 0; i < flowSteps.length; i++) {
+        const step   = flowSteps[i];
         const id     = topStepIds.get(step.stepNum)!;
-        const nextId = fn.steps[i + 1] ? topStepIds.get(fn.steps[i + 1].stepNum)! : undefined;
+        const nextId = flowSteps[i + 1] ? topStepIds.get(flowSteps[i + 1].stepNum)! : undefined;
 
         if (step.type === 'repeat') {
             const targetId = topStepIds.get(step.repeatTarget ?? -1);

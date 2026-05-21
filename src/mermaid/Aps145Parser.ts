@@ -41,7 +41,7 @@ function classifyContent(content: string): StepType {
     if (/^REPEAT:\s*from\s+Step\s+#\d+/i.test(t))          { return 'repeat'; }
     if (/^End\s*$/i.test(t))                                 { return 'end'; }
     if (/^(Is|What|Which|Keep|Continue)\b.+\?/.test(t))     { return 'decision'; }
-    if (/^DECLARE\b/i.test(t))                               { return 'declare'; }
+    if (/^DECLARE\s+(int|float|double|char|string|bool|struct|collection|array|object)\b/i.test(t)) { return 'declare'; }
     if (/^ASSIGN\b/i.test(t))                                { return 'assign'; }
     if (/^DISPLAY\b/i.test(t))                               { return 'display'; }
     if (/^CALL\b/i.test(t))                                  { return 'call'; }
@@ -148,11 +148,11 @@ function parseTopLevelSteps(
 
             // Merge continuation content into the label:
             // - If the step line had no inline content, join all continuation lines.
-            // - If the step is a bare keyword ending in ":" (e.g. "DISPLAY:", "DECLARE:"),
+            // - If the step is a bare keyword ending in ":" (e.g. "DISPLAY:", "DECLARE int:"),
             //   append all continuation lines so the node shows every variable/value.
             if (!content && contLines.length > 0) {
                 content = contLines.join('\n');
-            } else if (contLines.length > 0 && /^[A-Z]+:\s*$/.test(content)) {
+            } else if (contLines.length > 0 && /^[A-Z]+(\s+\w+)?:\s*$/.test(content)) {
                 content = content + '\n' + contLines.join('\n');
             }
 

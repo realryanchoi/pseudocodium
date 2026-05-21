@@ -9,6 +9,19 @@
     "engines": {
         "vscode": "^1.74.0"
     },
+    "keywords": [
+        "pseudocode",
+        "syntax highlighting",
+        "flowchart",
+        "mermaid",
+        "aps145",
+        "snippets"
+    ],
+    "homepage": "https://github.com/realryanchoi/pseudocodium",
+    "galleryBanner": {
+        "color": "#1e1e1e",
+        "theme": "dark"
+    },
     "categories": [
         "Programming Languages",
         "Snippets"

@@ -518,15 +518,15 @@
 		"prefix": "apsfunc",
 		"body": [
 			"----------------------------------------------------------------",
-			"Description/Purpose:",
+			"DESCRIPTION:",
 			" ${1:Brief description of what this function does}",
-			"Argument(s) : ${2:parameter descriptions}",
-			"Return Value: ${3:return value or Nothing}",
+			"ARGUMENTS: ${2:parameter descriptions}",
+			"RETURN: ${3:return value or Nothing}",
 			"----------------------------------------------------------------",
 			"${4:FunctionName} (${5:parameters})",
-			"1. DECLARE:",
-			"  ${6:variables}",
-			"2. ${7:first step}",
+			"1. DECLARE ${6|int,float,double,char,string,bool,struct,collection,array,object|}:",
+			"  ${7:variables}",
+			"2. ${8:first step}",
 			"3. ${0}",
 			"4. End"
 		],
@@ -535,8 +535,8 @@
 	"APS145 DECLARE Block": {
 		"prefix": "apsdeclare",
 		"body": [
-			"DECLARE:",
-			"  ${1:variableName}",
+			"DECLARE ${1|int,float,double,char,string,bool,struct,collection,array,object|}:",
+			"  ${2:variableName}",
 			"  ${0}"
 		],
 		"description": "APS145 variable declaration block"

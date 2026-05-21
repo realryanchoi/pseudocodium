@@ -4,11 +4,15 @@
 
 A syntax highlighting, snippets, and Mermaid flowchart preview extension for pseudocode. Supports two styles: **APS145 academic pseudocode** (`.aps`) and **generic C-style pseudocode** (`.pseudo`). Syntax highlighting covers multiple variants of common keywords so you can write in your own style without being confined to a specific format.
 
-<!-- [![Open VSX Version](https://img.shields.io/open-vsx/v/realryanchoi/pseudocodium)](https://open-vsx.org/extension/realryanchoi/pseudocodium)
+[![Open VSX Version](https://img.shields.io/open-vsx/v/realryanchoi/pseudocodium)](https://open-vsx.org/extension/realryanchoi/pseudocodium)
 
-Compatible with **VSCodium** and VSCode. Published on the [Open VSX Registry](https://open-vsx.org/extension/realryanchoi/pseudocodium). -->
+Compatible with **VSCodium** and VSCode. Published on the [Open VSX Registry](https://open-vsx.org/extension/realryanchoi/pseudocodium).
 
 ---
+
+## Developer Notes
+
+VSCodium expects the format publisher.extensionName-version for a symlink in ~/.vscode-oss/extensions/. Execute npm run watch in an external terminal and reload VSCode/Codium.
 
 ## What's New in v0.4.0
 
