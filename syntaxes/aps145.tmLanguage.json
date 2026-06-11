@@ -7,9 +7,13 @@
 		{ "include": "#comments" },
 		{ "include": "#doc-block" },
 		{ "include": "#aps145-keywords" },
+		{ "include": "#decision-questions" },
 		{ "include": "#step-numbers" },
 		{ "include": "#substep-letters" },
+		{ "include": "#date-selectors" },
 		{ "include": "#collection-methods" },
+		{ "include": "#now-keyword" },
+		{ "include": "#empty-keyword" },
 		{ "include": "#interpolation" },
 		{ "include": "#ui-elements" },
 		{ "include": "#type-annotations" },
@@ -45,7 +49,7 @@
 					"match": "^-{3,}\\s*$"
 				},
 				{
-					"match": "^(DESCRIPTION|ARGUMENTS|RETURN)\\s*:",
+					"match": "^(DESCRIPTION|Description/Purpose|ARGUMENTS|Argument\\(s\\)|PARAMETER|PARAMETERS|RETURN|Return Value|PURPOSE)\\s*:",
 					"captures": {
 						"1": { "name": "keyword.control.documentation.aps145" }
 					}
@@ -55,7 +59,7 @@
 		"aps145-keywords": {
 			"patterns": [
 				{
-					"match": "\\b(REPEAT):\\s+(from Step)\\s+(#\\d+)",
+					"match": "\\b(REPEAT):\\s+(from\\s+[Ss]tep)\\s+(#[0-9A-Z.]+)",
 					"captures": {
 						"1": { "name": "keyword.control.aps145" },
 						"2": { "name": "keyword.other.aps145" },
@@ -63,7 +67,7 @@
 					}
 				},
 				{
-					"match": "\\b(DECLARE)\\s+(int|float|double|char|string|bool|struct|collection|array|object)\\b",
+					"match": "\\b(DECLARE|INITIALIZE)\\b\\s*(int|float|real|double|char|string|bool|boolean|struct|collection|array|object)?\\b",
 					"captures": {
 						"1": { "name": "keyword.control.aps145" },
 						"2": { "name": "storage.type.aps145" }
@@ -71,9 +75,15 @@
 				},
 				{
 					"name": "keyword.control.aps145",
-					"match": "\\b(ASSIGN|DISPLAY|CALL|RETURN|REPEAT|END|End)\\b"
+					"match": "\\b(ASSIGN|DISPLAY|CALL|RETURN|REPEAT|END|End|CONSTANT)\\b"
 				}
 			]
+		},
+		"decision-questions": {
+			"match": "^\\s*([A-Z][a-z]+)\\b(?=\\s+[\\s\\S]+?\\?)",
+			"captures": {
+				"1": { "name": "keyword.control.decision.aps145" }
+			}
 		},
 		"step-numbers": {
 			"match": "^(\\s*)(\\d+)\\.",
@@ -87,22 +97,47 @@
 				"2": { "name": "constant.character.substep.aps145" }
 			}
 		},
+		"date-selectors": {
+			"match": "::(Year|Month|Day|Date|Hour|Minute|Second|Time)\\b",
+			"captures": {
+				"1": { "name": "support.function.builtin.date.aps145" }
+			}
+		},
 		"collection-methods": {
-			"match": "\\.(ADD|NEXT|DELETE|COUNT)\\b",
+			"match": "\\.(ADD|DELETE_AT|DELETE|REPLACE_AT|FIRST|LAST|NEXT|PREV|AT|COUNT)\\b",
 			"captures": {
 				"1": { "name": "support.function.builtin.aps145" }
 			}
 		},
+		"now-keyword": {
+			"name": "support.constant.builtin.aps145",
+			"match": "\\bNOW\\b"
+		},
+		"empty-keyword": {
+			"match": "\\b(EMPTY)(?:\\s+(COLLECTION))?\\b",
+			"captures": {
+				"1": { "name": "constant.language.empty.aps145" },
+				"2": { "name": "storage.type.aps145" }
+			}
+		},
 		"interpolation": {
-			"name": "variable.other.interpolated.aps145",
-			"match": "<[a-zA-Z_][a-zA-Z0-9_.]*>"
+			"patterns": [
+				{
+					"name": "variable.other.interpolated.aps145",
+					"match": "<[a-zA-Z_][a-zA-Z0-9_.]*>"
+				},
+				{
+					"name": "variable.other.interpolated.aps145",
+					"match": "\\[([a-zA-Z_][a-zA-Z0-9_.]*)\\]"
+				}
+			]
 		},
 		"ui-elements": {
 			"name": "string.other.ui-element.aps145",
 			"match": "\\[(BUTTON:[^\\]]*|User entered value)\\]"
 		},
 		"type-annotations": {
-			"match": "\\((Type|Collection of type):\\s*([a-zA-Z_][a-zA-Z0-9_]*)\\)",
+			"match": "\\((Type|type|Collection of type):\\s*([a-zA-Z_][a-zA-Z0-9_]*)\\)",
 			"captures": {
 				"1": { "name": "storage.type.annotation.aps145" },
 				"2": { "name": "entity.name.type.aps145" }

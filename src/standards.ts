@@ -8,13 +8,24 @@ import { IndexInterface } from "./interfaces";
 export const STANDARDS: Record<string, IndexInterface> = {
     /**
      * APS145 course standard (Seneca Polytechnic).
-     * Core statement keywords and decision-point question words.
+     * Statement keywords, decision-point question words, and the built-in
+     * vocabulary from the APS145 textbook (NOW, EMPTY, TRUE/FALSE, etc.).
      */
     aps145: {
         keyword: [
-            "DECLARE", "ASSIGN", "DISPLAY", "CALL", "RETURN", "REPEAT", "END",
-            // Decision-point words used in "Is X?", "What X?", "Which X?" patterns
-            "Is", "What", "Which", "Keep", "Continue",
+            // Statement keywords
+            "DECLARE", "INITIALIZE", "ASSIGN", "DISPLAY", "CALL", "RETURN",
+            "REPEAT", "END", "End", "CONSTANT",
+            // Decision-point question starters
+            "Is", "Are", "Was", "Were", "Do", "Does", "Did",
+            "Has", "Have", "Had",
+            "Should", "Shall", "Can", "Could", "Will", "Would", "May", "Might", "Must",
+            "What", "Which", "Who", "Where", "When", "Why", "How",
+            "Keep", "Continue",
+            // Built-in values and types
+            "NOW", "EMPTY", "COLLECTION",
+            "TRUE", "FALSE", "NULL",
+            "Type", "type", "Collection of type",
         ],
     },
 
