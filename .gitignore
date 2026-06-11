@@ -6,5 +6,3 @@ out
 *.vsix
 # ignore class files
 /examples/aps145/
-/examples/aps145.pseudo
-examples/aps145.pseudo
