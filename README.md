@@ -10,23 +10,25 @@ Compatible with **VSCodium** and VSCode. Published on the [Open VSX Registry](ht
 
 ---
 
-## Developer Notes
+## What's New in v0.5.0
 
-VSCodium expects the format publisher.extensionName-version for a symlink in ~/.vscode-oss/extensions/. Execute npm run watch in an external terminal and reload VSCode/Codium.
+**APS145 textbook conformance:**
+- Bare `DECLARE:` (vars on continuation lines) and `INITIALIZE` are now recognised — no more requirement to attach a type to every DECLARE
+- Decision-question vocabulary expanded to the full textbook set (`Is`, `Are`, `Was`, `Do`, `Does`, `Did`, `Has`, `Have`, `Should`, `Can`, `What`, `Which`, `Keep`, `Continue`, …)
+- Nested decisions render correctly to any depth — required for textbook examples with 4+ levels of nesting and for nested `IF/ELSE IF/ELSE` inside loops
+- `REPEAT: from Step #N.A.M` — nested step-path targets are supported, not just integers
 
-## What's New in v0.4.0
+**Standard-compliant flowcharts:**
+- `DECLARE` now renders inside the flow (rectangle right after Start), matching the APS145 textbook diagrams
+- Start node labelled `Start: functionName` (squashed-oval stadium shape)
+- Comparison operators (`<`, `>`) survive escaping instead of getting eaten by interpolation rules
 
-**Dual grammar architecture:**
-- APS145 pseudocode now has its own file extensions (`.aps`, `.aps145`) and dedicated grammar with APS145-specific highlighting
-- Generic C-style pseudocode keeps `.pseudo` with its own grammar
-- Each grammar evolves independently
+**Built-in vocabulary:**
+- Grammar now highlights `NOW`, `EMPTY`, `EMPTY COLLECTION`, `CONSTANT`, date-part selectors (`::Year`, `::Date`, `::Hour`, …), and the full set of collection methods (`.ADD`, `.FIRST`, `.NEXT`, `.AT`, `.COUNT`, `.DELETE`, `.REPLACE_AT`, …)
 
-**Simplified file directive:**
-- Declare the dialect at the top of any file with `@aps145` or `@default` (replaces the old `// @standard:` comment syntax)
-
-**Flowchart preview for all pseudocode:**
-- The **Preview Flowchart** command now works for both `.aps` and `.pseudo` files
-- C-style constructs (`function`, `if/else`, `while`, `for`) are parsed and rendered as proper Mermaid flowcharts
+**New examples and snippets:**
+- Reference docs added under `examples/aps145/`: pseudocode template, worked Pet Shelter example, flowchart template, flowchart construct gallery
+- New snippets: `apsmain`, `apsdocblock`, `apsinitialize`, `apsif`, `apsifelse`, `apswhich`, `apsloop`, `apsdoloop`, `apscallreturn`, `apsstruct`, `apsreturn`
 
 ---
 
@@ -182,14 +184,25 @@ All snippets have uppercase variants prefixed with `u` (e.g. `uif`, `ufor`, `ufu
 
 | Snippet | Description |
 |---|---|
+| `apsmain` | Skeleton for the `main()` entry function (doc block + DECLARE + End) |
 | `apsfunc` | Full APS145 function documentation block template |
-| `apsdeclare` | `DECLARE:` variable block |
-| `apsdecision` | `Is`/`What`/`Which` decision structure (A/B branches) |
-| `apsrepeat` | `REPEAT: from Step #N` loop-back statement |
+| `apsdocblock` | 40-dash textbook documentation separator with Description/Argument(s)/Return Value |
+| `apsdeclare` | Bare `DECLARE:` variable block (textbook standard) |
+| `apsinitialize` | `INITIALIZE: var = value` statement |
+| `apsif` | Optional selection (one-sided IF) — single YES branch |
+| `apsifelse` | Alternative selection — YES / NO branches |
+| `apswhich` | Multiple alternative selection — `What`/`Which` with three labelled cases |
+| `apsdecision` | Generic decision with any standard starter (Is/Does/Has/Should/…) |
+| `apsloop` | Optional iteration (check first — zero or more loops) |
+| `apsdoloop` | Mandatory iteration (check after — at least one loop) |
+| `apsrepeat` | `REPEAT: from Step #N` (or nested `#N.A.M`) loop-back statement |
 | `apsassign` | `ASSIGN: var = value` statement |
 | `apsdisplay` | `DISPLAY:` output block |
-| `apscall` | `CALL: FunctionName(args)` statement |
-| `apscollection` | Empty collection declaration |
+| `apscall` | `CALL: FunctionName(args)` — return value ignored |
+| `apscallreturn` | `ASSIGN: result = CALL: FunctionName(args)` — capture explicit return |
+| `apscollection` | `EMPTY (Collection of type: TypeName)` declaration |
+| `apsstruct` | `EMPTY (type: StructureName)` declaration |
+| `apsreturn` | `RETURN expression` (explicit return) |
 
 ---
 
@@ -224,7 +237,7 @@ end
 
 | Directive | File extensions | Keywords include |
 |---|---|---|
-| `@aps145` | `.aps`, `.aps145`, `.pseudo` | `DECLARE`, `ASSIGN`, `DISPLAY`, `CALL`, `RETURN`, `REPEAT`, `END`, `Is`, `What`, `Which`, `Keep`, `Continue` |
+| `@aps145` | `.aps`, `.aps145`, `.pseudo` | Statements: `DECLARE`, `INITIALIZE`, `ASSIGN`, `DISPLAY`, `CALL`, `RETURN`, `REPEAT`, `END`, `CONSTANT`. Decision starters: `Is`, `Are`, `Was`, `Were`, `Do`, `Does`, `Did`, `Has`, `Have`, `Had`, `Should`, `Shall`, `Can`, `Could`, `Will`, `Would`, `May`, `Might`, `Must`, `What`, `Which`, `Who`, `Where`, `When`, `Why`, `How`, `Keep`, `Continue`. Built-ins: `NOW`, `EMPTY`, `COLLECTION`, `TRUE`, `FALSE`, `NULL` |
 | `@default` | `.pseudo` | `IF`, `THEN`, `ELSE`, `WHILE`, `FOR`, `FOREACH`, `FUNCTION`, `PROCEDURE`, `RETURN`, `CLASS`, `TRUE`, `FALSE`, `NULL`, `AND`, `OR`, `NOT`, `INPUT`, `OUTPUT`, and more |
 
 #### Keyword Merge Order
@@ -302,13 +315,22 @@ The following improvements are planned or desirable for future releases.
 - **Language server (LSP)** — a full language server would unlock hover documentation, go-to-definition, and rename refactoring for pseudocode symbols.
 - **More snippet variants** — snippets for common algorithm patterns (binary search, merge sort, recursion templates, etc.).
 - **Snippet-configurable style** — a setting to choose between brace-style and `do...end`-style as the default for snippet expansion.
-- **Marketplace polish** — add `galleryBanner`, `keywords`, and `homepage` fields to `package.json` for better discoverability on Open VSX.
 
 ---
 
 ## Release Notes
 
 See [CHANGELOG.md](CHANGELOG.md) for the full history.
+
+### 0.5.0
+
+- APS145 textbook conformance: bare `DECLARE:`, `INITIALIZE`, broader decision vocabulary
+- Nested decisions parsed and rendered to any depth
+- `REPEAT: from Step #N.A.M` nested step-path targets supported
+- `DECLARE` renders inside the flowchart (per textbook convention) instead of disconnected above
+- Comparison operators (`<`, `>`) no longer collide with `<varName>` interpolation
+- Grammar highlights `NOW`, `EMPTY`, date selectors, and the full collection-method set
+- New reference docs under `examples/aps145/` and new APS145 snippets
 
 ### 0.4.0
 
@@ -328,62 +350,51 @@ See [CHANGELOG.md](CHANGELOG.md) for the full history.
 
 - Forked as **Pseudocodium** from [willumz/generic-pseudocode-vscode](https://github.com/willumz/generic-pseudocode-vscode) for VSCodium / Open VSX
 
-Option 1: F5 in VSCode/VSCodium (recommended)                                                                                                                                                        
-                                                            
-  1. Open the repo folder in VSCode/VSCodium:                                                                                                                                                          
-  code /mnt/forge/github/pseudocodium                                                                                                                                                                  
-  # or
-  codium /mnt/forge/github/pseudocodium
-  2. Press F5 (or Run → Start Debugging). This opens a second window — the Extension Development Host — with your extension loaded from source.
-  3. In that second window, open examples/aps145.pseudo.
-  4. Trigger the command in one of two ways:
-    - Click the hierarchy icon (⑂) in the editor title bar
-    - Open the Command Palette (Ctrl+Shift+P) → type Preview Flowchart
-  5. A panel should open beside the editor with three flowcharts — one each for main, AddStudent, and DisplayAllStudents.
+---
 
-  ---
-  Option 2: Install the .vsix locally
+## Development
 
-  If you want to test in your real editor environment (not a dev host):
+### Build from source
 
-  cd /mnt/forge/github/pseudocodium
+```bash
+git clone https://github.com/realryanchoi/pseudocodium.git
+cd pseudocodium
+npm install
+npm run compile     # one-shot build
+npm run watch       # incremental rebuild during development
+```
 
-  # Install vsce if you don't have it
-  npm install -g @vscode/vsce
+### Run the Extension Development Host
 
-  # Package it
-  vsce package
+1. Open the project folder in VSCode or VSCodium.
+2. Press **F5** (or **Run → Start Debugging**) to launch a second window with the extension loaded from source.
+3. In that window, open `examples/aps145/aps145.pseudo`.
+4. Trigger **Preview Flowchart** via the hierarchy icon (⑂) in the editor title bar, or the Command Palette (**Ctrl+Shift+P**) → "Preview Flowchart".
 
-  # Install it
-  code --install-extension pseudocodium-0.3.0.vsix
-  # or for VSCodium:
-  codium --install-extension pseudocodium-0.3.0.vsix
+A panel opens beside the editor with a Mermaid flowchart for the `main()` function.
 
-  Then reload the window and open examples/aps145.pseudo.
+### Package and install locally
 
-  ---
-  Things to verify
+To test the packaged `.vsix` in your everyday editor instead of the dev host:
 
-  ┌──────────────────────────────────┬────────────────────────────────────────────────────────────────────────────────────────────┐
-  │               What               │                                          Expected                                          │
-  ├──────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ Three flowchart sections visible │ main(), AddStudent(students), DisplayAllStudents(students)                                 │
-  ├──────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ main decision diamond            │ "Is continueAdding = TRUE?" with YES branch and NO edge to step 3                          │
-  ├──────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ REPEAT edges                     │ Dashed lines looping back (step 4 → step 2 in main, step 3 → step 3 in DisplayAllStudents) │
-  ├──────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ CALL: nodes                      │ Double-bordered subroutine box                                                             │
-  ├──────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ End nodes                        │ Rounded stadium shape                                                                      │
-  ├──────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ Theme                            │ Dark/light should match your editor                                                        │
-  ├──────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ Reopen panel                     │ Running the command again while panel is open should refresh it, not open a second panel   │
-  └──────────────────────────────────┴────────────────────────────────────────────────────────────────────────────────────────────┘
+```bash
+npm install -g @vscode/vsce
+vsce package
+code --install-extension pseudocodium-0.5.0.vsix
+# or for VSCodium:
+codium --install-extension pseudocodium-0.5.0.vsix
+```
 
-  ---
-  Known limitation to be aware of
+VSCodium expects the layout `~/.vscode-oss/extensions/<publisher>.<extensionName>-<version>` when symlinking an extension folder for local testing.
 
-  The webview loads Mermaid from cdn.jsdelivr.net, so you need network access for the diagrams to render. If the SVGs don't appear (nodes show as raw text), that's the cause — it'll work fine once
-  online.
+### What to expect in the preview
+
+| Element | Appearance |
+|---|---|
+| Start / `End` nodes | Rounded stadium shape |
+| Top-level steps | Rectangles |
+| `CALL:` steps | Double-bordered subroutine box |
+| Decision steps (`Is ...?`) | Diamond with `YES` / `NO` edges |
+| `REPEAT:` edges | Dashed lines looping back to the target step |
+| Theme | Follows the editor's dark/light theme |
+| Re-running the command | Refreshes the existing panel; does not open a second one |

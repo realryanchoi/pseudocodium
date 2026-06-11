@@ -1,5 +1,39 @@
 # Change Log
 
+## 0.5.0
+
+**APS145 textbook conformance:**
+- Parser now accepts bare `DECLARE:` (vars on continuation lines) per the textbook, not just typed `DECLARE int:` forms
+- `INITIALIZE` keyword recognised as a declaration step
+- Decision-question starters broadened to the full textbook vocabulary: `Is`, `Are`, `Was`, `Were`, `Do`, `Does`, `Did`, `Has`, `Have`, `Had`, `Should`, `Shall`, `Can`, `Could`, `Will`, `Would`, `May`, `Might`, `Must`, `What`, `Which`, `Who`, `Where`, `When`, `Why`, `How`, `Keep`, `Continue`
+- `REPEAT: from Step #N.A.M` — nested step references are now supported as loop-back targets, not just integer top-level steps
+
+**Nested decisions in flowcharts:**
+- Decision sub-steps inside branches now have their own branches parsed and rendered, so textbook examples with 4+ levels of decision nesting work end-to-end
+- Path-based node IDs (e.g. `main_s5_A_s4_B_s1`) replace the previous flat naming, so REPEAT targets at any depth resolve correctly
+
+**Flowchart symbol fidelity to APS145 textbook:**
+- Start node now reads `Start: functionName` and renders as a stadium (squashed oval) per the textbook
+- DECLARE renders **inside** the flow as the first rectangle after Start, with an arrow into the first action step — no longer disconnected above the flowchart
+- `<` and `>` comparison operators no longer collide with APS145 `<varName>` interpolation; operators are emitted as Mermaid HTML entities
+
+**Grammar coverage:**
+- Added `NOW`, `EMPTY`, `EMPTY COLLECTION`, `CONSTANT`, `INITIALIZE`, `Type`, `type`, `Collection of type`
+- Date-part selectors highlighted: `::Year`, `::Month`, `::Day`, `::Date`, `::Hour`, `::Minute`, `::Second`, `::Time`
+- Collection methods highlighted: `.ADD`, `.DELETE`, `.DELETE_AT`, `.REPLACE_AT`, `.FIRST`, `.LAST`, `.NEXT`, `.PREV`, `.AT`, `.COUNT`
+- Doc-block field labels recognised in both styles: `DESCRIPTION:` / `Description/Purpose:`, `ARGUMENTS:` / `Argument(s) :`, `PARAMETER(S):`, `RETURN:` / `Return Value:`
+- Decision starters highlighted as keywords at line start
+- `[varName]` interpolation form recognised alongside `<varName>`
+
+**Snippets:**
+- `apsdeclare` updated to the bare-`DECLARE:` form (no longer requires a type choice)
+- New snippets: `apsmain`, `apsdocblock`, `apsinitialize`, `apsif`, `apsifelse`, `apswhich`, `apsloop`, `apsdoloop`, `apscallreturn`, `apsstruct`, `apsreturn`
+- `apsdecision` accepts the broader starter vocabulary
+
+**Examples:**
+- New reference docs under `examples/aps145/`: `aps145-pseudocode-template.md`, `aps145-pseudocode-example.md`, `aps145-flowchart-template.md`, `aps145-flowchart-examples.md`
+- `activity4.pseudo` rewritten in textbook-standard form (three functions including a nested 3-way decision)
+
 ## 0.4.0
 
 **Dual grammar architecture:**
