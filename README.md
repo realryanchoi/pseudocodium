@@ -2,7 +2,7 @@
 
 > Forked from [willumz/generic-pseudocode-vscode](https://github.com/willumz/generic-pseudocode-vscode) — adapted for VSCodium and the Open VSX Registry. Extended with support for multiple pseudocode standards, and Mermaid.js flowchart generation.
 
-A syntax highlighting, snippets, and Mermaid flowchart preview extension for pseudocode. Supports two styles: **APS145 academic pseudocode** (`.aps`) and **generic C-style pseudocode** (`.pseudo`). Syntax highlighting covers multiple variants of common keywords so you can write in your own style without being confined to a specific format.
+A syntax highlighting, snippets, and Mermaid flowchart preview extension for pseudocode file formats (.pseudo). Syntax highlighting covers multiple variants of common keywords so you can write in your own style without being confined to a specific format.
 
 [![Open VSX Version](https://img.shields.io/open-vsx/v/realryanchoi/pseudocodium)](https://open-vsx.org/extension/realryanchoi/pseudocodium)
 

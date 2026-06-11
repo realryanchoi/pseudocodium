@@ -1,7 +1,7 @@
 {
     "name": "pseudocodium",
     "displayName": "Pseudocodium",
-    "description": "Syntax highlighting, snippets, and Mermaid flowchart preview for pseudocode. Supports APS145 academic standard (.aps) and generic C-style pseudocode (.pseudo).",
+    "description": "A syntax highlighting, snippets, and Mermaid flowchart preview extension for pseudocode file formats (.pseudo).",
     "publisher": "realryanchoi",
     "license": "MIT",
     "icon": "logo.png",
