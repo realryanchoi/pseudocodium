@@ -514,48 +514,158 @@
 		"description": "Define a struct with do"
 	},
 
+	"APS145 Doc Block Separator": {
+		"prefix": "apsdocblock",
+		"body": [
+			"----------------------------------------------------------------",
+			"Description/Purpose:",
+			"   ${1:Brief description of WHAT this function does.}",
+			"",
+			"Argument(s) : ${2:**NONE**}",
+			"Return Value: ${3:**NONE**}",
+			"----------------------------------------------------------------"
+		],
+		"description": "APS145 textbook-style 40-dash documentation block"
+	},
 	"APS145 Function Template": {
 		"prefix": "apsfunc",
 		"body": [
 			"----------------------------------------------------------------",
-			"DESCRIPTION:",
-			" ${1:Brief description of what this function does}",
-			"ARGUMENTS: ${2:parameter descriptions}",
-			"RETURN: ${3:return value or Nothing}",
+			"Description/Purpose:",
+			"   ${1:Brief description of WHAT this function does.}",
+			"",
+			"Argument(s) : ${2:**NONE**}",
+			"Return Value: ${3:**NONE**}",
 			"----------------------------------------------------------------",
-			"${4:FunctionName} (${5:parameters})",
-			"1. DECLARE ${6|int,float,double,char,string,bool,struct,collection,array,object|}:",
-			"  ${7:variables}",
-			"2. ${8:first step}",
+			"",
+			"${4:FunctionName}(${5:parameters})",
+			"",
+			"1. DECLARE:",
+			"      ${6:variableName}",
+			"",
+			"2. ${7:first step}",
+			"",
 			"3. ${0}",
+			"",
 			"4. End"
 		],
-		"description": "APS145 function documentation template"
+		"description": "APS145 function documentation template (textbook standard)"
+	},
+	"APS145 Main Function Skeleton": {
+		"prefix": "apsmain",
+		"body": [
+			"----------------------------------------------------------------",
+			"Description/Purpose:",
+			"   Entry point. Orchestrates the overall solution.",
+			"",
+			"Argument(s) : **NONE**",
+			"Return Value: **NONE**",
+			"----------------------------------------------------------------",
+			"",
+			"main()",
+			"",
+			"1. DECLARE:",
+			"      ${1:topLevelState}",
+			"",
+			"2. ${0:first action}",
+			"",
+			"3. End"
+		],
+		"description": "APS145 main() function skeleton"
 	},
 	"APS145 DECLARE Block": {
 		"prefix": "apsdeclare",
 		"body": [
-			"DECLARE ${1|int,float,double,char,string,bool,struct,collection,array,object|}:",
-			"  ${2:variableName}",
-			"  ${0}"
+			"DECLARE:",
+			"   ${1:variableName}",
+			"   ${0}"
 		],
-		"description": "APS145 variable declaration block"
+		"description": "APS145 bare DECLARE block (textbook standard)"
+	},
+	"APS145 INITIALIZE Statement": {
+		"prefix": "apsinitialize",
+		"body": "INITIALIZE: ${1:variable} = ${0:initialValue}",
+		"description": "APS145 INITIALIZE statement"
+	},
+	"APS145 Optional Selection (one-sided IF)": {
+		"prefix": "apsif",
+		"body": [
+			"${1|Is,Does,Has,Was,Should,Can|} ${2:condition}?",
+			"   A. YES${3: (technical expression)}:",
+			"      1. ${0:statement}"
+		],
+		"description": "APS145 optional selection (one-sided IF)"
+	},
+	"APS145 Alternative Selection (IF/ELSE)": {
+		"prefix": "apsifelse",
+		"body": [
+			"${1|Is,Does,Has,Was,Should,Can|} ${2:condition}?",
+			"   A. YES${3: (technical expression)}:",
+			"      1. ${4:statement}",
+			"   B. NO:",
+			"      1. ${0:statement}"
+		],
+		"description": "APS145 alternative selection (IF/ELSE)"
+	},
+	"APS145 Multiple Alternative Selection": {
+		"prefix": "apswhich",
+		"body": [
+			"${1|What,Which|} ${2:thingBeingDecided}?",
+			"   A. ${3:CASE_1} (${4:expression}):",
+			"      1. ${5:statement}",
+			"   B. ${6:CASE_2} (${7:expression}):",
+			"      1. ${8:statement}",
+			"   C. ${9:CASE_3} (${10:expression}):",
+			"      1. ${0:statement}"
+		],
+		"description": "APS145 multiple alternative selection (IF/ELSE IF/ELSE)"
 	},
 	"APS145 Decision Pattern": {
 		"prefix": "apsdecision",
 		"body": [
-			"${1|Is,What,Which|} ${2:condition}?",
-			"  A. ${3:YES}:",
-			"    1. ${4:statement}",
-			"  B. ${5:NO}:",
-			"    1. ${0:statement}"
+			"${1|Is,What,Which,Does,Did,Has,Have,Should,Was,Can,Continue,Keep|} ${2:condition}?",
+			"   A. YES:",
+			"      1. ${3:statement}",
+			"   B. NO:",
+			"      1. ${0:statement}"
 		],
-		"description": "APS145 Is/What/Which decision structure"
+		"description": "APS145 decision structure (any starter)"
+	},
+	"APS145 Optional Iteration (check first)": {
+		"prefix": "apsloop",
+		"body": [
+			"${1:N}. DISPLAY:",
+			"      \"${2:prompt asking whether to continue}\"",
+			"",
+			"$3. ASSIGN: ${4:continueFlag} = [User entered value]",
+			"",
+			"$5. ${6:Should we continue}? ($4 = ${7:TRUE})",
+			"   A. YES:",
+			"      1. ${0:loop body}",
+			"      2. REPEAT: from Step #$1"
+		],
+		"description": "APS145 optional iteration (check FIRST — zero or more loops)"
+	},
+	"APS145 Mandatory Iteration (check after)": {
+		"prefix": "apsdoloop",
+		"body": [
+			"${1:N}. ${2:loop body}",
+			"",
+			"$3. DISPLAY:",
+			"      \"${4:prompt asking whether to continue}\"",
+			"",
+			"$5. ASSIGN: ${6:continueFlag} = [User entered value]",
+			"",
+			"$7. ${8:Should we continue}? ($6 = ${9:TRUE})",
+			"   A. YES:",
+			"      1. REPEAT: from Step #$1"
+		],
+		"description": "APS145 mandatory iteration (check AFTER — at least one loop)"
 	},
 	"APS145 REPEAT Statement": {
 		"prefix": "apsrepeat",
 		"body": "REPEAT: from Step #${1:number}",
-		"description": "APS145 loop back to previous step"
+		"description": "APS145 loop-back statement (top-level or nested #N.A.M)"
 	},
 	"APS145 ASSIGN Statement": {
 		"prefix": "apsassign",
@@ -566,19 +676,34 @@
 		"prefix": "apsdisplay",
 		"body": [
 			"DISPLAY:",
-			"  \"${1:message}\"",
-			"  ${0}"
+			"   \"${1:message}\"",
+			"   ${0}"
 		],
 		"description": "APS145 display output block"
 	},
 	"APS145 CALL Statement": {
 		"prefix": "apscall",
 		"body": "CALL: ${1:FunctionName}(${2:arguments})",
-		"description": "APS145 function call"
+		"description": "APS145 function call (return value ignored)"
+	},
+	"APS145 CALL with Return Capture": {
+		"prefix": "apscallreturn",
+		"body": "ASSIGN: ${1:result} = CALL: ${2:FunctionName}(${3:arguments})",
+		"description": "APS145 function call capturing explicit return value"
 	},
 	"APS145 Collection Declaration": {
 		"prefix": "apscollection",
 		"body": "${1:collectionName} = EMPTY (Collection of type: ${2:TypeName})",
 		"description": "APS145 empty collection declaration"
+	},
+	"APS145 Structure Declaration": {
+		"prefix": "apsstruct",
+		"body": "${1:structVar} = EMPTY (type: ${2:StructureName})",
+		"description": "APS145 empty structure declaration"
+	},
+	"APS145 RETURN Statement": {
+		"prefix": "apsreturn",
+		"body": "RETURN ${1:expression}",
+		"description": "APS145 explicit return"
 	}
 }
