@@ -202,7 +202,7 @@ class DefaultParser {
                     stepNum: this.nextStep(),
                     type: 'repeat',
                     label: `REPEAT: from Step #${loopStepNum}`,
-                    repeatTarget: loopStepNum,
+                    repeatTarget: String(loopStepNum),
                 });
 
                 steps.push({
@@ -231,7 +231,7 @@ class DefaultParser {
                     stepNum: this.nextStep(),
                     type: 'repeat',
                     label: `REPEAT: from Step #${loopStepNum}`,
-                    repeatTarget: loopStepNum,
+                    repeatTarget: String(loopStepNum),
                 });
 
                 steps.push({

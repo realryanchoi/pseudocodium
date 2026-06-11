@@ -21,8 +21,11 @@ export interface ParsedStep {
     stepNum: number;
     type: StepType;
     label: string;
-    /** Set for type === 'repeat': the step number to loop back to */
-    repeatTarget?: number;
+    /**
+     * Set for type === 'repeat': the path to loop back to.
+     * Top-level step: "3". Nested sub-step: "3.A.2" or deeper.
+     */
+    repeatTarget?: string;
     /** Set for type === 'decision': the branches under this decision */
     branches?: ParsedBranch[];
 }
