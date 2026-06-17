@@ -211,7 +211,7 @@ function emitDecisionEdges(
 
         if (branch.steps.length === 0) {
             if (fallthroughId) {
-                edges.push(`    ${decisionId} -->|${branch.label}| ${fallthroughId}`);
+                edges.push(`    ${decisionId} -->|"${escLabel(branch.label)}"| ${fallthroughId}`);
             }
             continue;
         }
@@ -220,7 +220,7 @@ function emitDecisionEdges(
         // We connect directly to the branch's first sub-step.
         const firstSubPath = `${branchPath}.${branch.steps[0].stepNum}`;
         const firstSubId   = pathToId(fnPrefix, firstSubPath);
-        edges.push(`    ${decisionId} -->|${branch.label}| ${firstSubId}`);
+        edges.push(`    ${decisionId} -->|"${escLabel(branch.label)}"| ${firstSubId}`);
 
         // Define + sequentially connect every sub-step inside this branch.
         // emitBlock will draw an extra entry → first edge that duplicates the
@@ -239,7 +239,7 @@ function emitDecisionEdges(
 
     if (needsImplicit && fallthroughId) {
         const elseLabel = inferElseLabel(branches.map(b => b.label));
-        edges.push(`    ${decisionId} -->|${elseLabel}| ${fallthroughId}`);
+        edges.push(`    ${decisionId} -->|"${escLabel(elseLabel)}"| ${fallthroughId}`);
     }
 }
 
