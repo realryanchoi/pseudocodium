@@ -1,12 +1,11 @@
 .vscode/**
-.vscode-test/**
+*.vsix
 .git/**
 .gitignore
 src/**
 tsconfig.json
 package-lock.json
 node_modules/**
-*.vsix
-examples/**
-FLOWCHART.md
-CLAUDE.md
+examples/aps145
+images
+*.md
