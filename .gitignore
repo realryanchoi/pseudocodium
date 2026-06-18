@@ -1,8 +1,14 @@
+# vscode
+.vscode
+
 # npm
 node_modules
+
 # typescript build files
 out
+
 # ignore .vsix files until ready
 *.vsix
+
 # ignore class files
 /examples/aps145/
